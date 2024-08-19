@@ -4,6 +4,7 @@
     font-family: "Poppins", sans-serif;
     font-weight: 400; /* Default font-weight to 400 for better readability */
     font-style: normal;
+    border: none;
 }
 
 /* navbar */
@@ -88,3 +89,52 @@
       .zoom-image:hover {
         transform: scale(1.05); /* Memperbesar gambar sedikit */
       }
+
+      .img-thumbnail {
+        transition: transform 0.3s ease-in-out;
+      }
+      
+      .img-thumbnail:hover {
+        transform: scale(1.1);
+      }
+      
+      /* Efek untuk teks */
+.interactive-text {
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.interactive-text:hover {
+  transform: scale(1.05); /* Zoom in pada teks */
+  color: #0056b3; /* Ubah warna teks saat hover */
+}
+
+/* Efek untuk tombol */
+.interactive-btn {
+  transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.interactive-btn:hover {
+  transform: scale(1.05); /* Zoom in pada tombol */
+  background-color: #004085; /* Ubah warna latar belakang saat hover */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Tambahkan bayangan saat hover */
+}
+
+
+.parallax {
+  background-image: url('img/mobil/yrtawcck1dh2do53jsy3.jpg'); /* Ganti dengan URL gambar latar belakang */
+  height: 400px; /* Sesuaikan tinggi parallax */
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative;
+  z-index: -1;
+}
+
+.zoom-on-scroll {
+  transition: transform 0.3s ease;
+}
+
+.zoom-on-scroll.zoomed {
+  transform: scale(1.05);
+}
