@@ -1,0 +1,90 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
+* {
+    font-family: "Poppins", sans-serif;
+    font-weight: 400; /* Default font-weight to 400 for better readability */
+    font-style: normal;
+}
+
+/* navbar */
+.navbar-custom {
+    background-color: #D1E9F6; /* Background color */
+}
+
+.navbar-custom .navbar-brand,
+.navbar-custom .nav-link {
+    color: #D1E9F6; /* Adjusted text color to a darker shade for better contrast */
+}
+
+/* Change text color on hover */
+.navbar-custom .nav-link:hover {
+    color: #D1E9F6;
+}
+
+/* Change text color when active */
+.navbar-custom .nav-link.active {
+    color: #D1E9F6;
+}
+
+
+
+
+      /* Navbar Custom Styling */
+      .navbar-custom {
+        background-color: rgba(
+          0,
+          123,
+          255,
+          0.8
+        ); /* Slightly transparent blue background */
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+        transition: background-color 0.3s ease-in-out,
+          box-shadow 0.3s ease-in-out; /* Smooth transition for scrolling effect */
+      }
+
+      .navbar-custom .navbar-brand,
+      .navbar-custom .nav-link {
+        color: #fff;
+      }
+
+      /* Change shadow and background on scroll */
+      .navbar-custom.sticky-top {
+        background-color: rgba(0, 123, 255, 1); /* Solid color when scrolled */
+        box-shadow: 0 8px 10px rgba(0, 0, 0, 0.2); /* Deeper shadow */
+      }
+
+      /* Adjust text and link color on hover */
+      .navbar-custom .nav-link:hover {
+        color: #ffcc00;
+      }
+
+      /* Adjust text color for active links */
+      .navbar-custom .nav-link.active {
+        color: #ffcc00;
+      }
+
+      /* Carousel Image Styling */
+      .carousel-item img {
+        object-fit: cover;
+        height: 400px; /* Adjust height as needed */
+        border-radius: 10px;
+      }
+
+      /* Animasi Zoom untuk Teks */
+      .zoom-text {
+        display: inline-block;
+        transition: transform 0.3s ease-in-out; /* Durasi dan jenis transisi */
+      }
+
+      .zoom-text:hover {
+        transform: scale(1.1); /* Memperbesar teks */
+      }
+
+      /* Animasi Zoom untuk Gambar Slider */
+      .zoom-image {
+        transition: transform 0.3s ease-in-out; /* Durasi dan jenis transisi */
+      }
+
+      .zoom-image:hover {
+        transform: scale(1.05); /* Memperbesar gambar sedikit */
+      }
