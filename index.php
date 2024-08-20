@@ -40,6 +40,9 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
             <li class="nav-item">
+              <a class="nav-link" href="index.php">Home</a>
+            </li>
+            <li class="nav-item">
               <a class="nav-link" href="#">Pembelian</a>
             </li>
             <li class="nav-item">
@@ -210,7 +213,7 @@
                 <p class="mb-4 interactive-text">
                   Dapatkan penawaran terbaik untuk mobil bekas berkualitas tinggi dengan harga yang sangat bersaing. Kami menyediakan berbagai pilihan yang memenuhi standar kualitas tinggi dan fleksibilitas dalam pembiayaan.
                 </p>
-                <a href="login.html" class="btn btn-primary w-100 interactive-btn">
+                <a href="login.php" class="btn btn-primary w-100 interactive-btn">
                   Mau beli yok !! Login dulu
                 </a>
               </div>
@@ -224,5 +227,6 @@
       integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
       crossorigin="anonymous"
     ></script>
+    <script src="js/main.js"></script>
   </body>
 </html>
