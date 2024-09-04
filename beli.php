@@ -65,6 +65,58 @@
         <!-- Repeat similar structure for other cars -->
     </div>
 
+    <div class="container mt-5">
+        <div class="card d-flex flex-row mb-3" style="width: 100%;">
+            <img src="img/shop/q0vflat0axhqz0pulfzy.jpg" class="card-img-left" alt="Gambar Mobil" style="width: 50%; object-fit: cover;">
+            <div class="card-body d-flex flex-column justify-content-center" style="width: 50%;">
+                <h5 class="card-title">Pajero Esport</h5>
+                <p class="card-text">Mobil bekas dengan kualitas terbaik dan harga terjangkau. Segera miliki mobil impian Anda!</p>
+                <p class="card-text"><strong>Nama Mobil:</strong> Pajero Esport</p>
+                <p class="card-text"><strong>Harga:</strong> Rp 100.000.000</p>
+                <p class="card-text"><strong>Lama Pemakaian:</strong> 6 bulan</p>
+                <button type="button" class="btn btn-warning mb-2" data-bs-toggle="modal" data-bs-target="#infoModal">
+                    Info
+                </button>
+                <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#cekBarangModal">
+                    <i class="fa-solid fa-triangle-exclamation"></i>&nbsp;Cek Barang Dulu Sebelum Beli
+                </button>
+                <button type="button" class="btn btn-primary mt-3 buy-btn" data-bs-toggle="modal" data-bs-target="#buyModal" data-car-model="Pajero Esport" data-car-price="Rp 100.000.000">
+                    <i class="fa-solid fa-cart-shopping"></i>&nbsp;Beli
+                </button>
+            </div>
+        </div>
+        <!-- Repeat similar structure for other cars -->
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     <!-- Modal for Purchase Conditions -->
     <div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">

@@ -12,12 +12,52 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
     integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    body {
+      background-image: url(img/login/c14d3a9c6cf248aa9ce2f61c77a5f425_1608x906.jpg);
+      background-size: cover;
+    }
+
+    .login-form-container {
+      max-width: 400px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.8);
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .login-form-container .form-control {
+      height: 45px;
+    }
+
+    .login-form-container .form-label {
+      font-weight: bold;
+    }
+
+    .login {
+      margin-top: 140px;
+    }
+
+    .login-title {
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .register-link {
+      text-align: center;
+      margin-top: 20px;
+    }
+  </style>
 </head>
 
 <body>
 <nav class="navbar navbar-expand-lg navbar-custom sticky-top">
         <div class="container">
-            <a class="navbar-brand nav-link" href="#">Kapan Lagi yok Beli Segerah</a>
+            <a class="navbar-brand nav-link" href="#">Ayoh Cepetan Login</a>
             <button
                 class="navbar-toggler"
                 type="button"
