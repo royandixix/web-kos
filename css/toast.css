@@ -1,0 +1,6 @@
+.toast {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    z-index: 1050; /* Ensures it appears above other content */
+}

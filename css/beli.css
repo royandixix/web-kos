@@ -1,0 +1,15 @@
+/* Tambahkan efek zoom pada gambar */
+.card-img-left {
+    transition: transform 0.5s ease;
+}
+
+.card-img-left:hover {
+    transform: scale(1.1);
+}
+
+/* Gaya untuk gambar modal */
+.img-modal {
+    width: 100%; /* Memperpanjang gambar sesuai lebar modal */
+    height: auto; /* Menjaga aspek rasio gambar */
+    object-fit: cover; /* Memastikan gambar menutupi area kontainer */
+}
