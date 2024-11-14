@@ -1,62 +1,51 @@
 <?php
 session_start(); // Pastikan sesi dimulai
 
-require 'config/fungsi.php'; 
-require 'templates/header.php';   
+require 'config/fungsi.php';
+require 'templates/header.php';
 // require 'templates/navbar.php'; 
-require 'templates/footer.php'; 
+require 'templates/footer.php';
 
 // Proses Registrasi
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['registerName'])) {
-    $name = $db->real_escape_string($_POST['registerName']);
-    $email = $db->real_escape_string($_POST['registerEmail']);
-    $phone = $db->real_escape_string($_POST['registerPhone']);
-    $username = $db->real_escape_string($_POST['registerUsername']);
-    $password = $db->real_escape_string($_POST['registerPassword']);
-    $passwordConfirm = $db->real_escape_string($_POST['registerPasswordConfirm']);
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['registerName'])) {
+    $name = trim($_POST['registerName']);
+    $email = trim($_POST['registerEmail']);
+    $phone = trim($_POST['registerPhone']);
+    $username = trim($_POST['registerUsername']);
+    $password = $_POST['registerPassword'];
+    $passwordConfirm = $_POST['registerPasswordConfirm'];
     $foto = $_FILES['foto'];
 
-    // Panggil fungsi registrasi
-    $registrasiResult = registrasiPengguna($db, $name, $email, $phone, $username, $password, $passwordConfirm, $foto);
-    
-    // Set variabel sesi untuk foto pengguna jika registrasi berhasil
-    if ($registrasiResult === true) {
-        $_SESSION['userPhoto'] = $foto['name']; // Atur path foto yang diunggah di sesi
+    $registrasiResult = registrasiPengguna($name, $email, $phone, $username, $password, $passwordConfirm, $foto);
+
+    if ($registrasiResult === "Registrasi berhasil.") {
+        $_SESSION['userPhoto'] = $foto['name'];
     }
     echo "<script>alert('$registrasiResult');</script>";
 }
 
 // Proses Login
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['loginUsername'])) {
-    $loginUsername = $db->real_escape_string($_POST['loginUsername']);
-    $loginPassword = $db->real_escape_string($_POST['loginPassword']);
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['loginUsername'])) {
+    $loginUsername = trim($_POST['loginUsername']);
+    $loginPassword = $_POST['loginPassword'];
 
-    // Panggil fungsi login
-    $loginResult = loginPengguna($db, $loginUsername, $loginPassword);
+    $loginResult = loginPengguna($loginUsername, $loginPassword);
 
-    if ($loginResult !== false) {
-        // Set session untuk pengguna
-        $_SESSION['user'] = $loginResult; // Menyimpan data pengguna
-        $_SESSION['userPhoto'] = $loginResult['foto_222271']; // Menyimpan path foto
-        echo "<script>alert('Login berhasil!');</script>";
-        header("Location: admin.php"); // Arahkan ke halaman admin
+    if ($loginResult) {
+        $_SESSION['user'] = $loginResult;
+        $_SESSION['userPhoto'] = $loginResult['foto'];
+        $_SESSION['userRole'] = $loginResult['role'];
+        header("Location: dhasboard.php");
         exit;
     } else {
         echo "<script>alert('Username atau password salah!');</script>";
-        
     }
 }
-
-// Tutup koneksi jika diperlukan
-mysqli_close($db);
 ?>
-
-<!-- Halaman Login -->
 <style>
     body {
         background-image: url('img/kos/hilmy-jaya-architect-contractor-desain-interior-kos-kosan1606295687-m.png');
-        background-size: cover;
-        background-position: center;
+
     }
 </style>
 <div class="login">
@@ -75,13 +64,11 @@ mysqli_close($db);
                 <p>Belum punya akun?</p>
                 <button type="button" class="btn btn-primary" data-bs-target="#exampleModalToggle" data-bs-toggle="modal">Daftar di sini</button>
                 <button type="submit" class="btn btn-outline-success">Login</button>
-                <a href="index.php" class="btn btn-warning">Kembali</a> <!-- Tombol kembali -->
+                <a href="dhasboard.php" class="btn btn-warning">Kembali</a> <!-- Tombol kembali -->
             </form>
         </div>
     </div>
 </div>
-
-
 
 <!-- Halaman Register -->
 <div class="modal fade" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
@@ -117,6 +104,13 @@ mysqli_close($db);
                     <div class="mb-3">
                         <label for="registerPasswordConfirm" class="form-label">Konfirmasi Password</label>
                         <input type="password" class="form-control" name="registerPasswordConfirm" placeholder="Masukkan kembali password" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="registerRole" class="form-label">Role</label>
+                        <select class="form-select" name="registerRole" required>
+                            <option value="user">User</option>
+                            <option value="admin">Admin</option>
+                        </select>
                     </div>
                     <div class="mb-3">
                         <label for="foto" class="form-label">Upload Foto</label>

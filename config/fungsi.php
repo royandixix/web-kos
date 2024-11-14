@@ -1,114 +1,189 @@
 <?php
+
+
 // Koneksi ke database
 $db = mysqli_connect('localhost', 'root', '', '222271_royandi');
-
-// Cek koneksi
 if (!$db) {
     die("Koneksi ke database gagal: " . mysqli_connect_error());
 }
 
-// Fungsi untuk menjalankan query dan mengembalikan hasil sebagai array
+// Fungsi untuk menjalankan query
 function query($query)
 {
-    global $db; // Menggunakan variabel global $db
-    $result = mysqli_query($db, $query); // Menjalankan query
+    global $db;
+    $result = mysqli_query($db, $query);
     $rows = [];
-    while ($row = mysqli_fetch_assoc($result)) { // Mengambil hasil query
-        $rows[] = $row; // Menyimpan hasil ke dalam array
+    while ($row = mysqli_fetch_assoc($result)) {
+        $rows[] = $row;
     }
-    return $rows; // Mengembalikan array hasil
+    return $rows;
 }
 
-// Fungsi untuk registrasi pengguna
-function registrasiPengguna($db, $name, $email, $phone, $username, $password, $passwordConfirm, $foto)
+// Fungsi untuk registrasi pengguna/admin
+function registrasiPengguna($name, $email, $phone, $username, $password, $passwordConfirm, $foto, $role = 'user')
 {
-    // Cek apakah kata sandi sama
+    global $db;
+
+    // Validasi password
     if ($password !== $passwordConfirm) {
-        return "Kata sandi tidak sama."; // Mengembalikan pesan jika kata sandi tidak sama
+        return "Kata sandi tidak sama.";
     }
 
-    // Cek apakah username atau email sudah ada
-    $result = $db->query("SELECT * FROM pengguna_222271 WHERE username_222271 = '$username' OR email_222271 = '$email'");
-    if ($result->num_rows > 0) {
-        return "Username atau email sudah terdaftar!"; // Mengembalikan pesan jika sudah terdaftar
-    }
-
-    // Hash kata sandi
+    // Escape string
+    $name = mysqli_real_escape_string($db, trim($name));
+    $email = mysqli_real_escape_string($db, trim($email));
+    $phone = mysqli_real_escape_string($db, trim($phone));
+    $username = mysqli_real_escape_string($db, trim($username));
+    $role = mysqli_real_escape_string($db, trim($role));
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-    // Menangani foto
-    $targetDir = "uploads/"; // Direktori penyimpanan foto
-    $targetFile = $targetDir . basename($foto["name"]); // Nama file untuk disimpan
-    $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION)); // Mendapatkan ekstensi file
-
-    // Cek apakah file yang diunggah adalah gambar
-    $check = getimagesize($foto["tmp_name"]);
-    if ($check === false) {
-        return "File yang diunggah bukan gambar."; // Mengembalikan pesan jika bukan gambar
+    // Cek keberadaan username atau email
+    $result = mysqli_query($db, "SELECT * FROM pengguna_222271 WHERE username_222271 = '$username' OR email_222271 = '$email'");
+    if (mysqli_num_rows($result) > 0) {
+        return "Username atau email sudah terdaftar!";
     }
 
-    // Cek ukuran file (maksimal 2MB)
-    if ($foto["size"] > 2000000) {
-        return "Maaf, ukuran file terlalu besar."; // Mengembalikan pesan jika ukuran file terlalu besar
+    // Upload foto
+    $targetDir = "uploads/";
+    $targetFile = $targetDir . basename($foto['name']);
+    $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
+
+    if (!getimagesize($foto['tmp_name']) || !in_array($imageFileType, ['jpg', 'jpeg', 'png', 'gif'])) {
+        return "File yang diunggah bukan gambar atau format tidak didukung.";
     }
 
-    // Memastikan format file yang diizinkan
-    if (!in_array($imageFileType, ["jpg", "png", "jpeg", "gif"])) {
-        return "Maaf, hanya file JPG, JPEG, PNG & GIF yang diizinkan."; // Mengembalikan pesan jika format tidak diizinkan
+    if (!move_uploaded_file($foto['tmp_name'], $targetFile)) {
+        return "Terjadi kesalahan saat mengunggah foto.";
     }
 
-    // Mengunggah file gambar
-    if (move_uploaded_file($foto["tmp_name"], $targetFile)) {
-        // Simpan pengguna baru ke database
-        $query = "INSERT INTO pengguna_222271 (nama_222271, email_222271, no_hp_222271, foto_222271) 
-                  VALUES ('$name', '$email', '$phone', '$targetFile')";
-        if (mysqli_query($db, $query)) {
-            $penggunaId = mysqli_insert_id($db); // Mendapatkan id pengguna yang baru dibuat
+    // Simpan data pengguna
+    $queryPengguna = "INSERT INTO pengguna_222271 (nama_222271, email_222271, nomorTelepon_222271, username_222271, foto_222271, role_222271) 
+                      VALUES ('$name', '$email', '$phone', '$username', '$targetFile', '$role')";
+    if ($db->query($queryPengguna)) {
+        $penggunaId = $db->insert_id;
 
-            // Simpan login ke tabel login_222271
-            $loginQuery = "INSERT INTO login_222271 (pengguna_id_222271, username_222271, password_222271) 
-                           VALUES ('$penggunaId', '$username', '$hashedPassword')";
-
-            if (mysqli_query($db, $loginQuery)) {
-                return "Registrasi berhasil."; // Mengembalikan pesan sukses
-            } else {
-                return "Terjadi kesalahan saat menyimpan login: " . mysqli_error($db); // Mengembalikan pesan kesalahan
-            }
+        // Simpan data login
+        $queryLogin = "INSERT INTO login_222271 (pengguna_id_222271, username_222271, password_222271) 
+                       VALUES ('$penggunaId', '$username', '$hashedPassword')";
+        if ($db->query($queryLogin)) {
+            return "Registrasi berhasil.";
         } else {
-            return "Terjadi kesalahan saat registrasi: " . mysqli_error($db); // Mengembalikan pesan kesalahan
+            return "Terjadi kesalahan saat menyimpan login: " . $db->error;
         }
     } else {
-        return "Maaf, terjadi kesalahan saat mengunggah gambar."; // Mengembalikan pesan kesalahan
+        return "Terjadi kesalahan saat registrasi: " . $db->error;
     }
 }
 
-// Fungsi untuk login pengguna
-function loginPengguna($db, $loginUsername, $loginPassword)
+// Fungsi untuk login pengguna/admin
+function loginPengguna($username, $password)
 {
-    // Query untuk mencari username
-    $query = "SELECT * FROM login_222271 WHERE username_222271 = '$loginUsername'";
+    global $db;
+    $username = mysqli_real_escape_string($db, $username);
+
+    $query = "SELECT * FROM login_222271 l 
+              JOIN pengguna_222271 p ON l.pengguna_id_222271 = p.id_222271 
+              WHERE l.username_222271 = '$username'";
     $result = mysqli_query($db, $query);
 
-    // Cek apakah username ditemukan
-    if (mysqli_num_rows($result) == 1) {
-        $user = mysqli_fetch_assoc($result); // Mengambil data pengguna
-
-        // Memverifikasi kata sandi
-        if (password_verify($loginPassword, $user['password_222271'])) {
-            // Mengambil informasi pengguna yang terkait
-            $penggunaId = $user['pengguna_id_222271'];
-            $userDetailsQuery = "SELECT * FROM pengguna_222271 WHERE id_222271 = '$penggunaId'";
-            $userDetailsResult = mysqli_query($db, $userDetailsQuery);
-
-            // Mengembalikan data pengguna
-            if (mysqli_num_rows($userDetailsResult) == 1) {
-                return mysqli_fetch_assoc($userDetailsResult); // Mengembalikan data pengguna
-            }
-        } else {
-            return false; // Kata sandi salah
+    if ($result && mysqli_num_rows($result) === 1) {
+        $user = mysqli_fetch_assoc($result);
+        if (password_verify($password, $user['password_222271'])) {
+            return [
+                'id' => $user['pengguna_id_222271'],
+                'username' => $user['username_222271'],
+                'role' => $user['role_222271'],
+                'foto' => $user['foto_222271']
+            ];
         }
+    }
+    return false;
+}
+
+// Fungsi untuk mengambil data pengguna
+function ambilDataPengguna($id)
+{
+    global $db; // Mengambil variabel $db dari scope global
+    $query = "SELECT * FROM pengguna_222271 WHERE id_222271 = '$id'";
+    $result = mysqli_query($db, $query);
+    return mysqli_fetch_assoc($result);
+}
+
+
+// Fungsi untuk memperbarui pengguna
+function perbaruiPengguna($id, $name, $email, $phone, $role)
+{
+    global $db;
+    $name = mysqli_real_escape_string($db, $name);
+    $email = mysqli_real_escape_string($db, $email);
+    $phone = mysqli_real_escape_string($db, $phone);
+    $role = mysqli_real_escape_string($db, $role);
+    $id = mysqli_real_escape_string($db, $id);
+
+    $query = "UPDATE pengguna_222271 SET nama_222271 = '$name', email_222271 = '$email', nomorTelepon_222271 = '$phone', role_222271 = '$role' WHERE id_222271 = '$id'";
+
+    if (mysqli_query($db, $query)) {
+        return true;
     } else {
-        return false; // Username tidak ditemukan
+        echo "Error: " . mysqli_error($db);
+        return false;
     }
 }
-?>
+
+// Fungsi untuk menghapus pengguna
+function hapusPengguna($id)
+{
+    global $db; // Pastikan $db adalah variabel koneksi database
+
+    // Query SQL untuk menghapus data
+    $query = "DELETE FROM pengguna_222271 WHERE id_222271 = $id";
+
+    // Eksekusi query dan periksa keberhasilannya
+    if ($db->query($query) === TRUE) {
+        return true; // Mengembalikan true jika berhasil
+    } else {
+        return false; // Mengembalikan false jika gagal
+    }
+}
+
+// Fungsi untuk menambahkan barang barang ke database
+function kamar($post)
+{
+    global $db;
+
+    // Mengambil data dari form dan mengamankannya
+    $pemilik_kost_id = mysqli_real_escape_string($db, $post['pemilik_kost_id']);
+    $nomor_kamar = mysqli_real_escape_string($db, $post['nomor_kamar']);
+    $harga = mysqli_real_escape_string($db, $post['harga']);
+    $status = isset($post['status']) ? mysqli_real_escape_string($db, $post['status']) : 'tersedia';
+    $deskripsi = mysqli_real_escape_string($db, $post['deskripsi']);
+    $tanggal_tersedia = isset($post['tanggal_tersedia']) ? mysqli_real_escape_string($db, $post['tanggal_tersedia']) : date('Y-m-d');
+    $fasilitas = mysqli_real_escape_string($db, $post['fasilitas']);
+    $foto = mysqli_real_escape_string($db, $post['foto']);
+    $rating = isset($post['rating']) ? mysqli_real_escape_string($db, $post['rating']) : null;
+
+    // Menambahkan barcode dengan nilai acak
+    $barcode = mt_rand(10000, 99999);
+
+    // Query INSERT dengan kolom yang diperbarui
+    $query = "INSERT INTO barang (pemilik_kost_id_222271, nomor_kamar_222271, harga_222271, status_222271, deskripsi_222271, 
+                                  tanggal_tersedia_222271, fasilitas_222271, foto_222271, rating_222271, barcode, tanggal)
+              VALUES ('$pemilik_kost_id', '$nomor_kamar', '$harga', '$status', '$deskripsi', 
+                      '$tanggal_tersedia', '$fasilitas', '$foto', '$rating', '$barcode', CURRENT_TIMESTAMP)";
+
+    // Menjalankan query dan memeriksa kesalahan
+    if (!mysqli_query($db, $query)) {
+        die("Error: " . mysqli_error($db));
+    }
+
+    return mysqli_affected_rows($db);
+}
+
+function sanitizeInput($data)
+{
+    global $db;
+    $data = trim($data);
+    $data = stripslashes($data);
+    $data = htmlspecialchars($data);
+    return mysqli_real_escape_string($db, $data);
+}

@@ -1,161 +1,151 @@
 <?php
-  require 'templates/header.php';   
-  require 'templates/navbar.php'; 
+require 'templates/header.php';
+require 'templates/navbar.php';
 ?>
-    <div class="container my-5">
-      <h3 class="text-3xl font-semibold zoom-text">
-        Platform Komunikasi Penghuni Kos<br />
-        <span class="text-primary">
-          Temukan Informasi, Fasilitas, dan Komunikasi Antar Penghuni!
-        </span>
-      </h3>
+<div class="container my-5">
+  <h3 class="text-3xl font-semibold zoom-text">
+    Platform Komunikasi Penghuni Kos<br />
+    <span class="text-primary">
+      Temukan Informasi, Fasilitas, dan Komunikasi Antar Penghuni!
+    </span>
+  </h3>
 
-      <p class="mt-3 font-semibold zoom-text">
-        <strong>
-          <b class="text-primary">Berbagai kemudahan dalam satu platform</b> 
-          Kami menyediakan platform ini agar penghuni kos dapat saling terhubung, 
-          mendapatkan informasi penting, serta memanfaatkan fasilitas yang disediakan oleh pengelola kos.
-        </strong>
-      </p>
+  <p class="mt-3 font-semibold zoom-text">
+    <strong>
+      <b class="text-primary">Berbagai kemudahan dalam satu platform</b>
+      Kami menyediakan platform ini agar penghuni kos dapat saling terhubung,
+      mendapatkan informasi penting, serta memanfaatkan fasilitas yang disediakan oleh pengelola kos.
+    </strong>
+  </p>
 
-      <!-- gambar slider -->
-      <div class="mt-5">
-        <div
-          id="carouselExampleCaptions"
-          class="carousel slide"
-          data-bs-ride="carousel"
-          data-bs-interval="2000"
-        >
-          <div class="carousel-indicators">
-            <button
-              type="button"
-              data-bs-target="#carouselExampleCaptions"
-              data-bs-slide-to="0"
-              class="active"
-              aria-current="true"
-              aria-label="Slide 1"
-            ></button>
-            <button
-              type="button"
-              data-bs-target="#carouselExampleCaptions"
-              data-bs-slide-to="1"
-              aria-label="Slide 2"
-            ></button>
-            <button
-              type="button"
-              data-bs-target="#carouselExampleCaptions"
-              data-bs-slide-to="2"
-              aria-label="Slide 3"
-            ></button>
+  <!-- gambar slider -->
+  <div class="mt-5">
+    <div
+      id="carouselExampleCaptions"
+      class="carousel slide"
+      data-bs-ride="carousel"
+      data-bs-interval="2000">
+      <div class="carousel-indicators">
+        <button
+          type="button"
+          data-bs-target="#carouselExampleCaptions"
+          data-bs-slide-to="0"
+          class="active"
+          aria-current="true"
+          aria-label="Slide 1"></button>
+        <button
+          type="button"
+          data-bs-target="#carouselExampleCaptions"
+          data-bs-slide-to="1"
+          aria-label="Slide 2"></button>
+        <button
+          type="button"
+          data-bs-target="#carouselExampleCaptions"
+          data-bs-slide-to="2"
+          aria-label="Slide 3"></button>
+      </div>
+      <div class="carousel-inner">
+        <div class="carousel-item active">
+          <img
+            src="img/kos/20210621-003531_miliki-usaha-koskosan-sendiri-dengan-pinjaman-online-ikuti-tips-ini-agar-lancar-mewujudkannya.jpeg"
+            class="d-block w-100 zoom-image"
+            alt="Gambar 1" />
+          <div class="carousel-caption d-none d-md-block">
+            <h5 class="zoom-text">Lorong Kos</h5>
+            <p>
+              Tampilan lorong kos yang nyaman dan aman.
+            </p>
           </div>
-          <div class="carousel-inner">
-            <div class="carousel-item active">
-              <img
-                src="img/kos/20210621-003531_miliki-usaha-koskosan-sendiri-dengan-pinjaman-online-ikuti-tips-ini-agar-lancar-mewujudkannya.jpeg"
-                class="d-block w-100 zoom-image"
-                alt="Gambar 1"
-              />
-              <div class="carousel-caption d-none d-md-block">
-                <h5 class="zoom-text">Lorong Kos</h5>
-                <p>
-                  Tampilan lorong kos yang nyaman dan aman.
-                </p>
-              </div>
-            </div>
-            <div class="carousel-item">
-              <img
-                src="img/kos/859964_720.jpg"
-                class="d-block w-100 zoom-image"
-                alt="Gambar 2"
-              />
-              <div class="carousel-caption d-none d-md-block">
-                <h5 class="zoom-text">Kamar Penghuni</h5>
-                <p>
-                  Kamar dengan fasilitas lengkap dan modern.
-                </p>
-              </div>
-            </div>
-            <div class="carousel-item">
-              <img
-                src="img/kos/contoh-gambar-desain-koskosan-lahan-sempit-46.jpeg"
-                class="d-block w-100 zoom-image"
-                alt="Gambar 3"
-              />
-              <div class="carousel-caption d-none d-md-block">
-                <h5 class="zoom-text">Ruang Bersama</h5>
-                <p>
-                  Ruang untuk berkumpul dan berkomunikasi dengan sesama penghuni.
-                </p>
-              </div>
-            </div>
+        </div>
+        <div class="carousel-item">
+          <img
+            src="img/kos/859964_720.jpg"
+            class="d-block w-100 zoom-image"
+            alt="Gambar 2" />
+          <div class="carousel-caption d-none d-md-block">
+            <h5 class="zoom-text">Kamar Penghuni</h5>
+            <p>
+              Kamar dengan fasilitas lengkap dan modern.
+            </p>
           </div>
-          <button
-            class="carousel-control-prev"
-            type="button"
-            data-bs-target="#carouselExampleCaptions"
-            data-bs-slide="prev"
-          >
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Sebelumnya</span>
-          </button>
-          <button
-            class="carousel-control-next"
-            type="button"
-            data-bs-target="#carouselExampleCaptions"
-            data-bs-slide="next"
-          >
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Selanjutnya</span>
-          </button>
+        </div>
+        <div class="carousel-item">
+          <img
+            src="img/kos/contoh-gambar-desain-koskosan-lahan-sempit-46.jpeg"
+            class="d-block w-100 zoom-image"
+            alt="Gambar 3" />
+          <div class="carousel-caption d-none d-md-block">
+            <h5 class="zoom-text">Ruang Bersama</h5>
+            <p>
+              Ruang untuk berkumpul dan berkomunikasi dengan sesama penghuni.
+            </p>
+          </div>
         </div>
       </div>
+      <button
+        class="carousel-control-prev"
+        type="button"
+        data-bs-target="#carouselExampleCaptions"
+        data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Sebelumnya</span>
+      </button>
+      <button
+        class="carousel-control-next"
+        type="button"
+        data-bs-target="#carouselExampleCaptions"
+        data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Selanjutnya</span>
+      </button>
+    </div>
+  </div>
 
-      <!-- Konten tambahan -->
-      <div class="container mt-5">
-        <div class="row">
-          <!-- Teks di sebelah kiri -->
-          <div class="zoom-text fs-5">
-            Informasi Lengkap: Dapatkan akses informasi terkini terkait fasilitas kos, kegiatan penghuni, dan pengumuman penting dari pengelola kos.
-            <br />
-            <span class="text-primary">
-              Kami selalu menyediakan informasi yang Anda butuhkan untuk menikmati kenyamanan tinggal di kos.
-              <b class="text-dark">
-                Dapatkan juga akses ke fitur komunikasi dengan penghuni lainnya, sehingga Anda bisa saling membantu dan berinteraksi dengan mudah.
-              </b>
-            </span>
-          </div>
+  <!-- Konten tambahan -->
+  <div class="container mt-5">
+    <div class="row">
+      <!-- Teks di sebelah kiri -->
+      <div class="zoom-text fs-5">
+        Informasi Lengkap: Dapatkan akses informasi terkini terkait fasilitas kos, kegiatan penghuni, dan pengumuman penting dari pengelola kos.
+        <br />
+        <span class="text-primary">
+          Kami selalu menyediakan informasi yang Anda butuhkan untuk menikmati kenyamanan tinggal di kos.
+          <b class="text-dark">
+            Dapatkan juga akses ke fitur komunikasi dengan penghuni lainnya, sehingga Anda bisa saling membantu dan berinteraksi dengan mudah.
+          </b>
+        </span>
+      </div>
 
-          <!-- Gambar di sebelah kanan -->
-          <div class="mt-5 row">
-            <div class="col-lg-6 col-md-12">
-              <img
-                src="img/kos/859964_720.jpg "
-                class="img-thumbnail rounded-3 w-100"
-                alt="Gambar Ruang Bersama"
-              />
-              <figcaption class="mt-3 figure-caption zoom-text">
-                Ruang bersama untuk komunikasi antar penghuni.
-              </figcaption>
-            </div>
+      <!-- Gambar di sebelah kanan -->
+      <div class="mt-5 row">
+        <div class="col-lg-6 col-md-12">
+          <img
+            src="img/kos/859964_720.jpg "
+            class="img-thumbnail rounded-3 w-100"
+            alt="Gambar Ruang Bersama" />
+          <figcaption class="mt-3 figure-caption zoom-text">
+            Ruang bersama untuk komunikasi antar penghuni.
+          </figcaption>
+        </div>
 
-            <div class="col-lg-6 col-md-12 d-flex align-items-center">
-              <div class="p-3">
-                <h3 class="fw-bold mb-3 interactive-text">Gabung Sekarang!</h3>
-                <p class="mb-4 interactive-text">
-                  Dapatkan kemudahan komunikasi dan informasi dengan sesama penghuni kos dan pengelola kos. Kami menyediakan berbagai fitur yang mempermudah kehidupan sehari-hari Anda di kos.
-                </p>
-                <a href="login.php" class="btn btn-primary w-100 interactive-btn">
-                  Login untuk bergabung
-                </a>
-              </div>
-            </div>
+        <div class="col-lg-6 col-md-12 d-flex align-items-center">
+          <div class="p-3">
+            <h3 class="fw-bold mb-3 interactive-text">Gabung Sekarang!</h3>
+            <p class="mb-4 interactive-text">
+              Dapatkan kemudahan komunikasi dan informasi dengan sesama penghuni kos dan pengelola kos. Kami menyediakan berbagai fitur yang mempermudah kehidupan sehari-hari Anda di kos.
+            </p>
+            <a href="login.php" class="btn btn-primary w-100 interactive-btn">
+              Login untuk bergabung
+            </a>
           </div>
         </div>
       </div>
     </div>
+  </div>
+</div>
 
 
-    <!-- Seksi Testimoni Penghuni -->
+<!-- Seksi Testimoni Penghuni -->
 <div class="container mt-5">
   <h3 class="text-center">Apa Kata Penghuni?</h3>
   <div class="row mt-4">
@@ -237,6 +227,8 @@
 
 
 
-<?php 
-  require 'templates/footer.php';
+
+
+<?php
+require 'templates/footer.php';
 ?>

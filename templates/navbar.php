@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-custom sticky-top">
     <div class="container">
-        <a class="navbar-brand nav-link" href="#">Platform Kos Anda</a>
+        <a class="navbar-brand nav-link" href="#">Platform Penyewaan Kost</a>
         <button
             class="navbar-toggler"
             type="button"
@@ -17,20 +17,20 @@
                     <a class="nav-link" href="index.php"><i class="fa-solid fa-house"></i>&nbsp;Beranda</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="beli.php"><i class="fa-solid fa-info-circle"></i>&nbsp;Info Kos</a>
+                    <a class="nav-link" href="beli.php"><i class="fa-solid fa-info-circle"></i>&nbsp;Sewa Kost</a>
                 </li>
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                     <a class="nav-link" href="kontak.php"><i class="fa-solid fa-phone"></i>&nbsp;Kontak</a>
-                </li>
+                </li> -->
                 <li class="nav-item">
-                    <a class="nav-link" href="admin.php"><i class="fas fa-tachometer-alt"></i>&nbsp;Dashboard</a>
+                    <a class="nav-link" href="dhasboard.php"><i class="fas fa-tachometer-alt"></i>&nbsp;Dashboard</a>
                 </li>
 
                 <!-- Profil dan Logout -->
                 <li class="nav-item d-flex align-items-center">
-                    <?php if (isset($_SESSION['userPhoto']) && isset($_SESSION['user']['nama_222271'])): ?>
-                        <img src="<?php echo htmlspecialchars($_SESSION['userPhoto']); ?>" alt="Foto Pengguna" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover; margin-right: 10px; cursor: pointer;" id="profile">
-                        <span style="cursor: pointer;" id="profile-name"><?php echo htmlspecialchars($_SESSION['user']['nama_222271']); ?></span>
+                    <?php if (isset($_SESSION['user']['profile_pic']) && isset($_SESSION['user']['name'])): ?>
+                        <img src="<?php echo htmlspecialchars($_SESSION['user']['profile_pic']); ?>" alt="Foto Pengguna" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover; margin-right: 10px; cursor: pointer;" id="profile">
+                        <span style="cursor: pointer;" id="profile-name"><?php echo htmlspecialchars($_SESSION['user']['name']); ?></span>
                     <?php else: ?>
                         <a class="nav-link" href="login.php">Login</a>
                     <?php endif; ?>
@@ -67,3 +67,11 @@
         });
     }
 </script>
+
+
+
+    
+
+<?php
+// Menghitung total penghuni
+?>

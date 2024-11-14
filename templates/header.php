@@ -23,6 +23,7 @@
     <link rel="stylesheet" href="css/style.css" />
     <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.datatables.net/2.1.3/css/dataTables.bootstrap5.css">
+    <link rel="stylesheet" href="dhasboard/assets/css/style.css">
 
     <!-- Favicon -->
     <link rel="icon" href="img/favicon.ico" type="image/x-icon">

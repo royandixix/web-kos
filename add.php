@@ -51,6 +51,18 @@
     </nav>
 
 
+    <div class="">
+        <div class="name">
+            <div class="tex">
+                <div class="decoration">
+                    <p>
+                        welcome 
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="container mt-5 ">
         <div class="card" style="width: 18rem;">
             <img src="..." class="card-img-top" alt="...">

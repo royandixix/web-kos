@@ -1,6 +1,5 @@
 <?php 
-require 'templates/header.php';
-require 'templates/navbar.php';
+
 require 'config/fungsi.php';
 
 // Koneksi ke database
@@ -49,19 +48,19 @@ mysqli_close($db);
 <div class="container mt-5">
     <h3 class="text-center">Edit Pengguna</h3>
     <form action="" method="POST">
-        <div class="form-group">
+        <div class="form-group mb-3 ">
             <label for="name">Nama</label>
             <input type="text" name="name" id="name" class="form-control" value="<?php echo htmlspecialchars($user['nama_222271']); ?>" required>
         </div>
-        <div class="form-group">
+        <div class="form-group mb-3">
             <label for="email">Email</label>
             <input type="email" name="email" id="email" class="form-control" value="<?php echo htmlspecialchars($user['email_222271']); ?>" required>
         </div>
-        <div class="form-group">
+        <div class="form-group mb-3">
             <label for="phone">No HP</label>
             <input type="text" name="phone" id="phone" class="form-control" value="<?php echo htmlspecialchars($user['no_hp_222271']); ?>" required>
         </div>
-        <div class="form-group">
+        <div class="form-group mb-3 ">
             <label for="role">Role</label>
             <select name="role" id="role" class="form-control" required>
                 <option value="penghuni" <?php echo ($user['role_222271'] == 'penghuni') ? 'selected' : ''; ?>>Penghuni</option>
