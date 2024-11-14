@@ -1,0 +1,39 @@
+   body {
+       background-image: url(img/login/c14d3a9c6cf248aa9ce2f61c77a5f425_1608x906.jpg);
+       background-image: url(img/kos/hilmy-jaya-architect-contractor-desain-interior-kos-kosan1606295687-m.png);
+       background-size: cover;
+   }
+   
+   .login-form-container {
+       max-width: 400px;
+       margin: auto;
+       background: rgba(255, 255, 255, 0.8);
+       padding: 20px;
+       border-radius: 10px;
+       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+   }
+   
+   .login-form-container .form-control {
+       height: 45px;
+   }
+   
+   .login-form-container .form-label {
+       font-weight: bold;
+   }
+   
+   .login {
+       margin-top: 140px;
+   }
+   
+   .login-title {
+       text-align: center;
+       font-size: 1.5rem;
+       font-weight: bold;
+       margin-bottom: 20px;
+       color: #333;
+   }
+   
+   .register-link {
+       text-align: center;
+       margin-top: 20px;
+   }

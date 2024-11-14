@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
             var modal = document.getElementById('buyModal');
             var carModelInput = modal.querySelector('#carModel');
             var carPriceInput = modal.querySelector('#carPrice');
-            
+
             carModelInput.value = carModel;
             carPriceInput.value = carPrice;
         });

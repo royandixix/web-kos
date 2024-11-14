@@ -1,128 +1,39 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Bootstrap Navbar Demo</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
-    <link rel="stylesheet" href="css/main.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
-        integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="css/beli.css">
-</head>
-<body>
-    <nav class="navbar navbar-expand-lg navbar-custom sticky-top">
-        <div class="container">
-            <a class="navbar-brand" href="#">Kapan Lagi Yok Beli Segera</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
+<?php
+require 'templates/header.php';
+require 'templates/navbar.php';
+?>
+
+<!-- Kos Cards -->
+<div class="container mt-5">
+    <div class="card d-flex flex-row mb-3" style="width: 100%;">
+        <img src="img/kos/photo-stair-pabuaran-resident-desain-arsitek-oleh-dtarchitekt.jpeg" class="card-img-left" alt="Gambar Kos" style="width: 50%; object-fit: cover;">
+        <div class="card-body d-flex flex-column justify-content-center" style="width: 50%;">
+            <h5 class="card-title">Pabuaran Resident</h5>
+            <p class="card-text">Kos nyaman dengan fasilitas lengkap dan harga terjangkau. Segera sewa kos impian Anda!</p>
+            <p class="card-text"><strong>Nama Kos:</strong> Pabuaran Resident</p>
+            <p class="card-text"><strong>Harga:</strong> Rp 1.500.000 / bulan</p>
+            <p class="card-text"><strong>Lokasi:</strong> Jl. Pabuaran No. 23, Jakarta</p>
+            <button type="button" class="btn btn-dark mb-2" data-bs-toggle="modal" data-bs-target="#fasilitasKosModal">Fasilitas</button>
+            <button type="button" class="btn btn-warning mb-2" data-bs-toggle="modal" data-bs-target="#infoKosModal">Info</button>
+            <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#cekBarangKosModal">
+                <i class="fa-solid fa-triangle-exclamation"></i>&nbsp;Cek Kos Sebelum Sewa
             </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.php"><i class="fa-solid fa-house"></i>&nbsp;Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="beli.php"><i class="fa-solid fa-bag-shopping"></i>&nbsp;Pembelian</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Link</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Disabled</a>
-                    </li>
-                    <li class="nav-item">
-                        <img src="img/profil/profile.jpg" alt="User Icon" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover; margin-left: 10px;">
-                    </li>
-                </ul>
-            </div>
+            <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#buyKosModal" data-kos-name="Pabuaran Resident" data-kos-price="Rp 1.500.000 / bulan">
+                <i class="fa-solid fa-cart-shopping"></i>&nbsp;Sewa
+            </button>
         </div>
-    </nav>
-
-    <!-- Car Cards -->
-    <div class="container mt-5">
-        <div class="card d-flex flex-row mb-3" style="width: 100%;">
-            <img src="img/shop/q0vflat0axhqz0pulfzy.jpg" class="card-img-left" alt="Gambar Mobil" style="width: 50%; object-fit: cover;">
-            <div class="card-body d-flex flex-column justify-content-center" style="width: 50%;">
-                <h5 class="card-title">Pajero Esport</h5>
-                <p class="card-text">Mobil bekas dengan kualitas terbaik dan harga terjangkau. Segera miliki mobil impian Anda!</p>
-                <p class="card-text"><strong>Nama Mobil:</strong> Pajero Esport</p>
-                <p class="card-text"><strong>Harga:</strong> Rp 100.000.000</p>
-                <p class="card-text"><strong>Lama Pemakaian:</strong> 6 bulan</p>
-                <button type="button" class="btn btn-warning mb-2" data-bs-toggle="modal" data-bs-target="#infoModal">
-                    Info
-                </button>
-                <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#cekBarangModal">
-                    <i class="fa-solid fa-triangle-exclamation"></i>&nbsp;Cek Barang Dulu Sebelum Beli
-                </button>
-                <button type="button" class="btn btn-primary mt-3 buy-btn" data-bs-toggle="modal" data-bs-target="#buyModal" data-car-model="Pajero Esport" data-car-price="Rp 100.000.000">
-                    <i class="fa-solid fa-cart-shopping"></i>&nbsp;Beli
-                </button>
-            </div>
-        </div>
-        <!-- Repeat similar structure for other cars -->
     </div>
+    <!-- Repeat similar structure for other kos -->
+</div>
 
-    <div class="container mt-5">
-        <div class="card d-flex flex-row mb-3" style="width: 100%;">
-            <img src="img/shop/q0vflat0axhqz0pulfzy.jpg" class="card-img-left" alt="Gambar Mobil" style="width: 50%; object-fit: cover;">
-            <div class="card-body d-flex flex-column justify-content-center" style="width: 50%;">
-                <h5 class="card-title">Pajero Esport</h5>
-                <p class="card-text">Mobil bekas dengan kualitas terbaik dan harga terjangkau. Segera miliki mobil impian Anda!</p>
-                <p class="card-text"><strong>Nama Mobil:</strong> Pajero Esport</p>
-                <p class="card-text"><strong>Harga:</strong> Rp 100.000.000</p>
-                <p class="card-text"><strong>Lama Pemakaian:</strong> 6 bulan</p>
-                <button type="button" class="btn btn-warning mb-2" data-bs-toggle="modal" data-bs-target="#infoModal">
-                    Info
-                </button>
-                <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#cekBarangModal">
-                    <i class="fa-solid fa-triangle-exclamation"></i>&nbsp;Cek Barang Dulu Sebelum Beli
-                </button>
-                <button type="button" class="btn btn-primary mt-3 buy-btn" data-bs-toggle="modal" data-bs-target="#buyModal" data-car-model="Pajero Esport" data-car-price="Rp 100.000.000">
-                    <i class="fa-solid fa-cart-shopping"></i>&nbsp;Beli
-                </button>
-            </div>
-        </div>
-        <!-- Repeat similar structure for other cars -->
-    </div>
+<div class="container mt-5">
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <!-- Modal for Purchase Conditions -->
-    <div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
+    <!-- Modal for Kos Conditions -->
+    <div class="modal fade" id="infoKosModal" tabindex="-1" aria-labelledby="infoKosModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="infoModalLabel">Syarat dan Ketentuan Pembelian</h5>
+                    <h5 class="modal-title" id="infoKosModalLabel">Syarat dan Ketentuan Penyewaan Kos</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -130,26 +41,24 @@
                     <ul>
                         <li>KTP asli dan salinan</li>
                         <li>NPWP (jika ada)</li>
-                        <li>Surat keterangan penghasilan atau slip gaji</li>
-                        <li>Fotokopi rekening koran 3 bulan terakhir</li>
+                        <li>Surat keterangan pekerjaan atau slip gaji</li>
                     </ul>
                     <p><strong>2. Persyaratan Umum:</strong></p>
                     <ul>
-                        <li>Usia minimal 21 tahun</li>
-                        <li>Memiliki penghasilan tetap</li>
-                        <li>Alamat tinggal yang jelas dan dapat diverifikasi</li>
+                        <li>Usia minimal 18 tahun</li>
+                        <li>Memiliki pekerjaan atau penghasilan tetap</li>
+                        <li>Mematuhi aturan kos</li>
                     </ul>
-                    <p><strong>3. Proses Pembelian:</strong></p>
+                    <p><strong>3. Proses Penyewaan:</strong></p>
                     <ul>
                         <li>Verifikasi dokumen dan data pribadi</li>
-                        <li>Pengajuan kredit (jika diperlukan)</li>
-                        <li>Penandatanganan kontrak pembelian</li>
-                        <li>Proses pengiriman atau pengambilan mobil</li>
+                        <li>Penandatanganan kontrak sewa</li>
+                        <li>Proses pembayaran dan penyerahan kunci</li>
                     </ul>
                     <p><strong>4. Kebijakan Pembatalan:</strong></p>
                     <ul>
-                        <li>Pembatalan hanya dapat dilakukan dalam waktu 24 jam setelah pemesanan</li>
-                        <li>Biaya pembatalan dapat dikenakan sesuai dengan ketentuan yang berlaku</li>
+                        <li>Pembatalan hanya dapat dilakukan sebelum pembayaran dilakukan</li>
+                        <li>Biaya pembatalan sesuai dengan ketentuan yang berlaku</li>
                     </ul>
                 </div>
                 <div class="modal-footer">
@@ -159,25 +68,46 @@
         </div>
     </div>
 
-    <!-- Modal for Check Car -->
-    <div class="modal fade" id="cekBarangModal" tabindex="-1" aria-labelledby="cekBarangModalLabel" aria-hidden="true">
+    <!-- Fasilitas Modal -->
+    <div class="modal fade" id="fasilitasKosModal" tabindex="-1" aria-labelledby="fasilitasKosModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="cekBarangModalLabel">Cek Barang Sebelum Beli</h5>
+                    <h5 class="modal-title" id="fasilitasKosModalLabel">Fasilitas Kos</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p>Berikut adalah beberapa hal yang perlu diperiksa sebelum membeli mobil:</p>
                     <ul>
-                        <li>Periksa kondisi fisik mobil secara menyeluruh</li>
-                        <li>Periksa dokumen kendaraan dan pastikan semuanya lengkap dan sah</li>
-                        <li>Lakukan test drive untuk memastikan kondisi mesin dan performa mobil</li>
-                        <li>Periksa riwayat servis dan pemeliharaan mobil</li>
-                        <li>Pastikan tidak ada masalah hukum terkait mobil</li>
+                        <li>Kamar ber-AC</li>
+                        <li>Tempat tidur dan lemari pakaian</li>
+                        <li>Kamar mandi dalam</li>
+                        <li>Wi-Fi gratis</li>
+                        <li>Dapur bersama</li>
                     </ul>
-                    <!-- Tambahkan gambar di sini -->
-                    <img src="img/shop/pqebnptdvxbzjqfpg6xc.jpg" alt="Cek Barang" class="img-fluid mt-3">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Check Kos -->
+    <div class="modal fade" id="cekBarangKosModal" tabindex="-1" aria-labelledby="cekBarangKosModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="cekBarangKosModalLabel">Cek Kos Sebelum Sewa</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Berikut adalah beberapa hal yang perlu diperiksa sebelum menyewa kos:</p>
+                    <ul>
+                        <li>Periksa kondisi kamar dan fasilitas secara langsung</li>
+                        <li>Tanyakan tentang aturan kos</li>
+                        <li>Pastikan tidak ada masalah terkait sewa sebelumnya</li>
+                    </ul>
+                    <img src="img/shop/pqebnptdvxbzjqfpg6xc.jpg" alt="Cek Kos" class="img-fluid mt-3">
                     <p class="mt-3">Jika Anda memiliki pertanyaan lebih lanjut atau butuh bantuan, silakan hubungi kami.</p>
                     <p>081347018612</p>
                 </div>
@@ -188,48 +118,45 @@
         </div>
     </div>
 
-    <!-- Formulir Pembelian Mobil Modal -->
-    <div class="modal fade" id="buyModal" tabindex="-1" aria-labelledby="buyModalLabel" aria-hidden="true">
+    <!-- Formulir Penyewaan Kos Modal -->
+    <div class="modal fade" id="buyKosModal" tabindex="-1" aria-labelledby="buyKosModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="buyModalLabel">Formulir Pembelian Mobil</h5>
+                    <h5 class="modal-title" id="buyKosModalLabel">Formulir Penyewaan Kos</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="purchaseForm">
+                    <form id="rentForm" action="sewa.php" method="POST">
                         <div class="mb-3">
                             <label for="name" class="form-label">Nama Lengkap</label>
-                            <input type="text" class="form-control" id="name" placeholder="Masukkan nama lengkap Anda" required>
+                            <input type="text" class="form-control" id="name" name="name" placeholder="Masukkan nama lengkap Anda" required>
                         </div>
                         <div class="mb-3">
                             <label for="email" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="email" placeholder="Masukkan alamat email Anda" required>
+                            <input type="email" class="form-control" id="email" name="email" placeholder="Masukkan alamat email Anda" required>
                         </div>
                         <div class="mb-3">
                             <label for="phone" class="form-label">Nomor Telepon</label>
-                            <input type="tel" class="form-control" id="phone" placeholder="Masukkan nomor telepon Anda" required>
+                            <input type="tel" class="form-control" id="phone" name="phone" placeholder="Masukkan nomor telepon Anda" required>
                         </div>
                         <div class="mb-3">
-                            <label for="address" class="form-label">Alamat Pengiriman</label>
-                            <textarea class="form-control" id="address" rows="3" placeholder="Masukkan alamat pengiriman Anda" required></textarea>
+                            <label for="address" class="form-label">Alamat Tinggal</label>
+                            <textarea class="form-control" id="address" name="address" rows="3" placeholder="Masukkan alamat tinggal Anda" required></textarea>
                         </div>
                         <div class="mb-3">
-                            <label for="carModel" class="form-label">Model Mobil</label>
-                            <input type="text" class="form-control" id="carModel" placeholder="Model mobil" readonly>
+                            <label for="kosName" class="form-label">Nama Kos</label>
+                            <input type="text" class="form-control" id="kosName" name="kosName" placeholder="Nama kos" readonly>
                         </div>
                         <div class="mb-3">
                             <label for="paymentMethod" class="form-label">Metode Pembayaran</label>
-                            <select class="form-select" id="paymentMethod" required>
+                            <select class="form-select" id="paymentMethod" name="paymentMethod" required>
                                 <option value="" disabled selected>Pilih metode pembayaran</option>
                                 <option value="cash">Tunai</option>
-                                <option value="credit">Kredit</option>
-                                <option value="leasing">Leasing</option>
+                                <option value="transfer">Transfer</option>
                             </select>
                         </div>
-                        <a href="beli.php">
                         <button type="submit" class="btn btn-primary">Kirim</button>
-                        </a>
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -241,25 +168,17 @@
 
     <!-- Toast Notification -->
     <div class="position-fixed top-0 end-0 p-3" style="z-index: 1050;">
-        <div id="purchaseToast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
+        <div id="rentToast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
             <div class="toast-header">
                 <strong class="me-auto">Pemberitahuan</strong>
                 <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
             <div class="toast-body">
-                Terima kasih telah melakukan pembelian! Kami akan segera memproses pesanan Anda.
+                Terima kasih telah melakukan penyewaan! Kami akan segera memproses pesanan Anda.
             </div>
         </div>
     </div>
 
-    <!-- Optional JavaScript; choose one of the two! -->
-    <!-- Bootstrap Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous"></script>
-    <script>
-      
-    </script>
-</body>
-</html>
+<?php
+require 'templates/footer.php';
+?>

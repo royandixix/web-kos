@@ -1,77 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Bootstrap Navbar Demo</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
-      crossorigin="anonymous"
-    />
-    <link rel="stylesheet" href="css/main.css" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
-      integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    />
-    <style></style>
-  </head>
-  <body>
-  <nav class="navbar navbar-expand-lg navbar-custom sticky-top">
-        <div class="container">
-            <a class="navbar-brand nav-link" href="#">Kapan Lagi yok Beli Segerah</a>
-            <button
-                class="navbar-toggler"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent"
-                aria-expanded="false"
-                aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.php"><i class="fa-solid fa-house"></i>&nbsp;Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="beli.php"><i class="fa-solid fa-bag-shopping"></i>&nbsp;Pembelian</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Link</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Disabled</a>
-                    </li>
-                    <li>
-                        <img src="img/profil/profile.jpg" alt="User Icon" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover; margin-left: 10px;">
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-
+<?php
+  require 'templates/header.php';   
+  require 'templates/navbar.php'; 
+?>
     <div class="container my-5">
       <h3 class="text-3xl font-semibold zoom-text">
-        Penjualan mobil bekas<br />
+        Platform Komunikasi Penghuni Kos<br />
         <span class="text-primary">
-          Temukan Mobil Bekas Berkualitas yang Anda Impikan!
+          Temukan Informasi, Fasilitas, dan Komunikasi Antar Penghuni!
         </span>
       </h3>
 
       <p class="mt-3 font-semibold zoom-text">
         <strong>
-          <b class="text-primary">Kualitas sangat terjamin</b> Setiap mobil
-          bekas di situs kami telah diperiksa oleh teknisi berpengalaman. Kami
-          hanya menawarkan mobil yang telah memenuhi standar kualitas tinggi,
-          sehingga Anda bisa membeli dengan percaya diri. Tempat terbaik untuk
-          menemukan berbagai pilihan mobil bekas dengan harga yang terjangkau
-          dan kualitas yang tak tertandingi!
+          <b class="text-primary">Berbagai kemudahan dalam satu platform</b> 
+          Kami menyediakan platform ini agar penghuni kos dapat saling terhubung, 
+          mendapatkan informasi penting, serta memanfaatkan fasilitas yang disediakan oleh pengelola kos.
         </strong>
       </p>
 
@@ -108,43 +51,40 @@
           <div class="carousel-inner">
             <div class="carousel-item active">
               <img
-                src="img/mobil/p06whvul8rouwww9fpu4.jpg"
+                src="img/kos/20210621-003531_miliki-usaha-koskosan-sendiri-dengan-pinjaman-online-ikuti-tips-ini-agar-lancar-mewujudkannya.jpeg"
                 class="d-block w-100 zoom-image"
                 alt="Gambar 1"
               />
               <div class="carousel-caption d-none d-md-block">
-                <h5 class="zoom-text">Halaman depan samping mobil</h5>
+                <h5 class="zoom-text">Lorong Kos</h5>
                 <p>
-                  Beberapa konten placeholder yang representatif untuk slide
-                  pertama.
+                  Tampilan lorong kos yang nyaman dan aman.
                 </p>
               </div>
             </div>
             <div class="carousel-item">
               <img
-                src="img/mobil/pqebnptdvxbzjqfpg6xc.jpg"
+                src="img/kos/859964_720.jpg"
                 class="d-block w-100 zoom-image"
                 alt="Gambar 2"
               />
               <div class="carousel-caption d-none d-md-block">
-                <h5 class="zoom-text">Halaman belakang mobil</h5>
+                <h5 class="zoom-text">Kamar Penghuni</h5>
                 <p>
-                  Beberapa konten placeholder yang representatif untuk slide
-                  kedua.
+                  Kamar dengan fasilitas lengkap dan modern.
                 </p>
               </div>
             </div>
             <div class="carousel-item">
               <img
-                src="img/mobil/q0vflat0axhqz0pulfzy.jpg"
+                src="img/kos/contoh-gambar-desain-koskosan-lahan-sempit-46.jpeg"
                 class="d-block w-100 zoom-image"
                 alt="Gambar 3"
               />
               <div class="carousel-caption d-none d-md-block">
-                <h5 class="zoom-text">Halaman full samping mobil</h5>
+                <h5 class="zoom-text">Ruang Bersama</h5>
                 <p>
-                  Beberapa konten placeholder yang representatif untuk slide
-                  ketiga.
+                  Ruang untuk berkumpul dan berkomunikasi dengan sesama penghuni.
                 </p>
               </div>
             </div>
@@ -173,60 +113,130 @@
       <!-- Konten tambahan -->
       <div class="container mt-5">
         <div class="row">
-          <!-- Teks di sebelah kiri pada layar besar dan di atas gambar pada layar kecil -->
-          <div class=" zoom-text fs-5 ">
-            Harga Terbaik: Nikmati harga yang sangat bersaing dan sesuai dengan
-            anggaran Anda.
+          <!-- Teks di sebelah kiri -->
+          <div class="zoom-text fs-5">
+            Informasi Lengkap: Dapatkan akses informasi terkini terkait fasilitas kos, kegiatan penghuni, dan pengumuman penting dari pengelola kos.
             <br />
             <span class="text-primary">
-              Kami menawarkan berbagai pilihan yang dapat memenuhi kebutuhan dan
-              preferensi Anda
+              Kami selalu menyediakan informasi yang Anda butuhkan untuk menikmati kenyamanan tinggal di kos.
               <b class="text-dark">
-                tanpa mengorbankan kualitas. Selain itu, kami selalu berusaha
-                memberikan penawaran terbaik, dengan berbagai paket pembiayaan
-                fleksibel yang dapat disesuaikan dengan kondisi keuangan Anda.
+                Dapatkan juga akses ke fitur komunikasi dengan penghuni lainnya, sehingga Anda bisa saling membantu dan berinteraksi dengan mudah.
               </b>
-              Dengan koleksi mobil bekas berkualitas dan layanan purna jual yang
-              unggul, Anda dapat menikmati kenyamanan dan ketenangan pikiran
-              saat memilih kendaraan yang tepat untuk Anda.
             </span>
           </div>
 
-          <!-- Gambar di sebelah kanan pada layar besar dan di bawah teks pada layar kecil -->
+          <!-- Gambar di sebelah kanan -->
           <div class="mt-5 row">
-            <!-- Gambar Mobil -->
             <div class="col-lg-6 col-md-12">
               <img
-                src="img/mobil/yrtawcck1dh2do53jsy3.jpg"
+                src="img/kos/859964_720.jpg "
                 class="img-thumbnail rounded-3 w-100"
-                alt="Gambar Mobil"
+                alt="Gambar Ruang Bersama"
               />
               <figcaption class="mt-3 figure-caption zoom-text">
-                A caption for the above image.
+                Ruang bersama untuk komunikasi antar penghuni.
               </figcaption>
             </div>
-          
-            <!-- Teks di Samping Kanan -->
+
             <div class="col-lg-6 col-md-12 d-flex align-items-center">
               <div class="p-3">
-                <h3 class="fw-bold mb-3 interactive-text">Temukan Mobil Impian Anda!</h3>
+                <h3 class="fw-bold mb-3 interactive-text">Gabung Sekarang!</h3>
                 <p class="mb-4 interactive-text">
-                  Dapatkan penawaran terbaik untuk mobil bekas berkualitas tinggi dengan harga yang sangat bersaing. Kami menyediakan berbagai pilihan yang memenuhi standar kualitas tinggi dan fleksibilitas dalam pembiayaan.
+                  Dapatkan kemudahan komunikasi dan informasi dengan sesama penghuni kos dan pengelola kos. Kami menyediakan berbagai fitur yang mempermudah kehidupan sehari-hari Anda di kos.
                 </p>
                 <a href="login.php" class="btn btn-primary w-100 interactive-btn">
-                  Mau beli yok !! Login dulu
+                  Login untuk bergabung
                 </a>
               </div>
             </div>
-            
-          
-         
+          </div>
+        </div>
+      </div>
+    </div>
 
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-      crossorigin="anonymous"
-    ></script>
-    <script src="js/main.js"></script>
-  </body>
-</html>
+
+    <!-- Seksi Testimoni Penghuni -->
+<div class="container mt-5">
+  <h3 class="text-center">Apa Kata Penghuni?</h3>
+  <div class="row mt-4">
+    <div class="col-lg-4 col-md-6">
+      <div class="card shadow-sm">
+        <img src="img/penghuni1.jpg" class="card-img-top" alt="Penghuni 1" />
+        <div class="card-body">
+          <h5 class="card-title">John Doe</h5>
+          <p class="card-text">
+            "Kos ini sangat nyaman dan aman. Fasilitasnya lengkap dan penghuni sangat ramah."
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4 col-md-6">
+      <div class="card shadow-sm">
+        <img src="img/penghuni2.jpg" class="card-img-top" alt="Penghuni 2" />
+        <div class="card-body">
+          <h5 class="card-title">Jane Smith</h5>
+          <p class="card-text">
+            "Lokasinya strategis dan lingkungan kos bersih. Pengelola kos sangat responsif!"
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4 col-md-6">
+      <div class="card shadow-sm">
+        <img src="img/penghuni3.jpg" class="card-img-top" alt="Penghuni 3" />
+        <div class="card-body">
+          <h5 class="card-title">Mark Lee</h5>
+          <p class="card-text">
+            "Fasilitas yang disediakan sangat membantu aktivitas sehari-hari. Ruang bersama sangat nyaman untuk bersosialisasi."
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Seksi Statistik Kos -->
+<div class="container mt-5">
+  <h3 class="text-center">Statistik Kos</h3>
+  <div class="row mt-4 text-center">
+    <div class="col-lg-4 col-md-6">
+      <div class="stat-box">
+        <h1>150+</h1>
+        <p>Penghuni Terdaftar</p>
+      </div>
+    </div>
+    <div class="col-lg-4 col-md-6">
+      <div class="stat-box">
+        <h1>50+</h1>
+        <p>Kamar Tersedia</p>
+      </div>
+    </div>
+    <div class="col-lg-4 col-md-6">
+      <div class="stat-box">
+        <h1>10+</h1>
+        <p>Fasilitas Utama</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="bg-dark text-light py-4 mt-5">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-6">
+        <h5>Tentang Kami</h5>
+        <p>Kos XYZ adalah tempat tinggal nyaman yang dilengkapi dengan berbagai fasilitas untuk memudahkan kehidupan sehari-hari penghuni.</p>
+      </div>
+      <div class="col-lg-6 text-end">
+        <h5>Ikuti Kami</h5>
+        <a href="#" class="text-light">Facebook</a> | <a href="#" class="text-light">Instagram</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+
+<?php 
+  require 'templates/footer.php';
+?>
