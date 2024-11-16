@@ -1,64 +1,78 @@
 <?php
-// Koneksi database
-include 'config/fungsi.php';
+require 'config/fungsi.php';
 
+// Proses form ketika data dikirim dengan method POST
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $alamat = $_POST['alamat_222271'];
-    $harga = $_POST['harga_222271'];
-    $fasilitas = $_POST['fasilitas_222271'];
+    // Menangkap data dari form
+    $alamat = mysqli_real_escape_string($db, $_POST['alamat_222271']);
+    $harga = (int)$_POST['harga_222271'];  // Konversi ke integer
+    $deskripsi = mysqli_real_escape_string($db, $_POST['deskripsi_222271']);
+    $tanggalTersedia = mysqli_real_escape_string($db, $_POST['tanggal_tersedia_222271']);
+    $fasilitas = mysqli_real_escape_string($db, $_POST['fasilitas_222271']);
+    $ukuran = mysqli_real_escape_string($db, $_POST['ukuran_222271']);
+    $rating = (float)$_POST['rating_222271'];  // Konversi ke float
 
-    $ukuran = $_POST['ukuran_222271'];
-    $tanggal_tersedia = $_POST['tanggal_tersedia_222271'];
-    $rating = $_POST['rating_222271'];
+    // Proses gambar (untuk multiple file)
+    $fotoPaths = [];
+    if (isset($_FILES['foto_222271'])) {
+        $foto = $_FILES['foto_222271'];
 
-    // Proses upload foto jika ada
-    $fotoArray = []; // Array untuk menyimpan nama file foto
-    if (!empty($_FILES['foto_222271']['name'][0])) { // Memeriksa jika ada file yang diupload
-        $target_dir = "img/"; // Folder tujuan penyimpanan foto
+        for ($i = 0; $i < count($foto['name']); $i++) {
+            $fileName = basename($foto['name'][$i]);
+            $fileTmp = $foto['tmp_name'][$i];
+            $fileSize = $foto['size'][$i];
+            $fileType = $foto['type'][$i];
+            $fileError = $foto['error'][$i];
 
-        foreach ($_FILES['foto_222271']['name'] as $key => $name) {
-            $foto = basename($name);
-            $target_file = $target_dir . $foto;
+            // Validasi jenis file
+            $allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+            if (!in_array($fileType, $allowedTypes)) {
+                echo "File {$fileName} bukan gambar yang diperbolehkan.";
+                continue;
+            }
 
-            // Memindahkan file ke folder tujuan
-            if (move_uploaded_file($_FILES['foto_222271']['tmp_name'][$key], $target_file)) {
-                $fotoArray[] = $foto; // Menambahkan nama file ke array
+            // Validasi ukuran file (maksimal 2 MB)
+            if ($fileSize > 2 * 1024 * 1024) {
+                echo "File {$fileName} terlalu besar (maksimal 2 MB).";
+                continue;
+            }
+
+            // Tentukan nama unik untuk file
+            $uniqueName = uniqid() . '_' . $fileName;
+            $fotoPath = 'uploads/' . $uniqueName;
+
+            // Pindahkan file ke folder uploads
+            if (move_uploaded_file($fileTmp, $fotoPath)) {
+                $fotoPaths[] = $uniqueName;
             } else {
-                echo "<script>
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'Error saat mengupload foto: " . $foto . "'
-                    });
-                </script>";
+                echo "Gagal mengupload file {$fileName}.";
             }
         }
     }
 
-    // Mengubah array foto menjadi string untuk disimpan dalam database
-    $fotoString = implode(',', $fotoArray); // Menggunakan koma sebagai pemisah
+    // Gabungkan foto yang diupload menjadi string yang dipisahkan koma
+    $fotoPathsString = implode(',', $fotoPaths);
 
-    // Query untuk menambahkan data kamar
-    $sql = "INSERT INTO kamar_222271 (alamat_222271, harga_222271, fasilitas_222271 , ukuran_222271, tanggal_tersedia_222271, foto_222271, rating_222271) 
-            VALUES ('$alamat', '$harga', '$fasilitas', '$ukuran', '$tanggal_tersedia', '$fotoString', '$rating')";
+    // SQL query untuk memasukkan data ke database
+    $sql = "INSERT INTO kamar_222271 (alamat_222271, harga_222271, deskripsi_222271, tanggal_tersedia_222271, fasilitas_222271, foto_222271, ukuran_222271, rating_222271) 
+            VALUES ('$alamat', '$harga', '$deskripsi', '$tanggalTersedia', '$fasilitas', '$fotoPathsString', '$ukuran', '$rating')";
 
-    // Eksekusi query dan cek error
-    if (mysqli_query($db, $sql)) {
-        echo "<script>
-        alert('Data kamar berhasil ditambahkan.');
-    </script>";
+    // Eksekusi query
+    if ($db->query($sql) === TRUE) {
+        echo "Kamar berhasil ditambahkan!";
     } else {
-        echo "<script>
-        alert('Error saat menambahkan data kamar: " . mysqli_error($db) . "');
-    </script>";
+        echo "Error: " . $db->error;
     }
 }
 
-// Mengambil data pengguna
+// Mengambil data pengguna dari database
 $rows = mysqli_query($db, "SELECT * FROM pengguna_222271");
+
+// Menghitung total penghuni
 $totalPenghuniQuery = mysqli_query($db, "SELECT COUNT(*) AS total FROM pengguna_222271");
-$totalPenghuni = mysqli_fetch_assoc($totalPenghuniQuery)['total'] ?? 0; // Mengambil total atau default ke 0 jika tidak ada
+$totalPenghuni = mysqli_fetch_assoc($totalPenghuniQuery)['total'] ?? 0;
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -420,7 +434,7 @@ $totalPenghuni = mysqli_fetch_assoc($totalPenghuniQuery)['total'] ?? 0; // Menga
                         </div>
                         <div class="form-group mb-3">
                             <label for="harga_222271">Harga per Bulan</label>
-                            <input type="text" name="harga_222271" id="harga_222271" class="form-control" placeholder="Contoh: 1.000.000" required oninput="formatHarga(this)">
+                            <input type="text" name="harga_222271" id="harga_222271" class="form-control" placeholder="Contoh: 1.000.000" required>
                         </div>
 
                         <div class="form-group mb-3">
@@ -447,8 +461,9 @@ $totalPenghuni = mysqli_fetch_assoc($totalPenghuniQuery)['total'] ?? 0; // Menga
                             <label for="rating_222271">Rating Kamar</label>
                             <input type="number" step="0.1" name="rating_222271" id="rating_222271" class="form-control" placeholder="Contoh: 4.5" required>
                         </div>
-                        <button type="submit" id="submitButton" class="btn btn-primary">Tambah Kamar</button>
+                        <button type="submit" class="btn btn-primary">Tambah Kamar</button>
                     </form>
+
                 </div>
             </div>
 

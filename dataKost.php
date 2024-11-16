@@ -1,44 +1,21 @@
 <?php
-session_start(); // Pastikan ini di awal file
+require 'config/fungsi.php';
 
-require 'config/fungsi.php'; // Pindahkan ini setelah session_start()
+// Query untuk mendapatkan data
+$query = "SELECT * FROM kamar_222271";
+$result = mysqli_query($db, $query);
 
-// // Cek jika pengguna sudah login
-// if (!isset($_SESSION['user'])) {
-//     header("Location: login.php"); // Redirect ke halaman login jika belum login
-//     exit;
-// }
+// Periksa apakah ada data
+if (!$result) {
+    die("Query error: " . mysqli_error($db));
+}
 
-// // Cek apakah pengguna adalah admin
-// if ($_SESSION['user']['role'] !== 'admin') {
-//     header("Location: index.php"); // Redirect ke halaman beranda jika bukan admin
-//     exit;
-// }
-
-/// Ambil data dari tabel 'pengguna_222271' yang hanya memiliki role admin
+// Simpan hasil query ke dalam array menggunakan mysqli_fetch_all
+$data_kamar = mysqli_fetch_all($result, MYSQLI_ASSOC);
 $rows = query("SELECT * FROM penyewaan_kos_222271");
 
 $totalPenghuniQuery = query("SELECT COUNT(*) AS total FROM pengguna_222271");
 $totalPenghuni = $totalPenghuniQuery[0]['total'] ?? 0; // Mengambil total atau default ke 0 jika tidak ada
-
-if (isset($_POST['login'])) {
-    $username = $_POST['username'];
-    $password = $_POST['password'];
-
-    $user = loginPengguna($db, $username, $password);
-    if ($user) {
-        // Simpan informasi pengguna ke dalam sesi
-        $_SESSION['user'] = [
-            'name' => $user['nama_222271'],
-            'role' => $user['role_222271'],
-            'profile_pic' => 'uploads/' . $user['profile_pic'] // Menyimpan path lengkap ke foto
-        ];
-        header("Location: dhasboard.php"); // Redirect ke halaman dashboard
-        exit;
-    } else {
-        $error = "Username atau password salah!";
-    }
-}
 ?>
 
 <!DOCTYPE html>
@@ -286,33 +263,48 @@ if (isset($_POST['login'])) {
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Nama</th>
-                                <th>Email</th>
-                                <th>No HP</th>
                                 <th>Alamat</th>
-                                <th>Sistem pembayaran</th>
-                                <th>Total</th>
-                                <th>Aksi</th>
+                                <th>Harga</th>
+                                <th>Status</th>
+                                <th>Deskripsi</th>
+                                <th>Tanggal Tersedia</th>
+                                <th>Fasilitas</th>
+                                <th>Foto</th>
+                                <th>Ukuran</th>
+                                <th>Rating</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <?php
-                            // Loop untuk menampilkan setiap data di tabel
-                            foreach ($rows as $index => $row):
-                            ?>
+                            <?php foreach ($data_kamar as $row): ?>
                                 <tr>
-                                    <td><?php echo $index + 1; ?></td>
-                                    <td><?php echo htmlspecialchars($row['nama_222271']); ?></td>
-                                    <td><?php echo htmlspecialchars($row['email_222271']); ?></td>
-                                    <td><?php echo htmlspecialchars($row['telepon_222271']); ?></td>
+                                    <td><?php echo htmlspecialchars($row['id_222271']); ?></td>
                                     <td><?php echo htmlspecialchars($row['alamat_222271']); ?></td>
-                                    <td><?php echo htmlspecialchars($row['metode_pembayaran_222271']); ?></td>
-                                    <td><?php echo htmlspecialchars($row['harga_222271']); ?></td>
-                                   
+                                    <td><?php echo htmlspecialchars(number_format($row['harga_222271'], 2)); ?></td>
+                                    <td><?php echo htmlspecialchars($row['status_222271']); ?></td>
+                                    <td><?php echo htmlspecialchars($row['deskripsi_222271']); ?></td>
+                                    <td><?php echo htmlspecialchars($row['tanggal_tersedia_222271']); ?></td>
+                                    <td><?php echo htmlspecialchars($row['fasilitas_222271']); ?></td>
                                     <td>
-                                        <a href="edit2.php?id=<?php echo $row['id_222271']; ?>" class="btn btn-warning btn-sm">Edit</a>
-                                        <a href="#" class="btn btn-danger btn-sm" onclick="confirmDelete(<?php echo $row['id_222271']; ?>)">Hapus</a>
+                                        <?php
+                                        // Mengambil nama file gambar dari kolom foto_222271
+                                        $foto_path = htmlspecialchars($row['foto_222271']);
+
+                                        // Membuat path gambar lengkap dari folder 'uploads/'
+                                        $upload_dir = 'uploads/';
+                                        $full_path = $upload_dir . $foto_path;
+
+                                        // Cek apakah gambar ada dan bisa diakses
+                                        if (!empty($foto_path) && file_exists($full_path)) {
+                                            echo '<img src="' . $full_path . '" alt="Foto Kamar" style="max-width: 100px; height: auto;">';
+                                        } else {
+                                            // Menampilkan gambar placeholder jika gambar tidak ditemukan
+                                            echo '<img src="uploads/placeholder.jpg" alt="Foto Kamar" style="max-width: 100px; height: auto;">';
+                                        }
+                                        ?>
                                     </td>
+
+                                    <td><?php echo htmlspecialchars($row['ukuran_222271']); ?></td>
+                                    <td><?php echo htmlspecialchars($row['rating_222271']); ?></td>
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>

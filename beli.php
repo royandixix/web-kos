@@ -62,7 +62,6 @@ function format_harga($harga)
 }
 ?>
 
-?>
 
 <div class="container mt-5">
     <?php
@@ -74,15 +73,19 @@ function format_harga($harga)
         foreach ($result as $row) {
     ?>
             <div class="card d-flex flex-row mb-3" style="width: 100%;">
-                <img src="img/<?php echo htmlspecialchars($row['foto_222271']); ?>" class="card-img-left" alt="Gambar Kamar Kos" style="width: 50%; object-fit: cover;">
+                <img src="uploads/<?php echo htmlspecialchars($row['foto_222271']); ?>"
+                    alt="Gambar Kamar Kos" style="width: 50%; object-fit: cover;">
+
+
                 <div class="card-body d-flex flex-column justify-content-center" style="width: 50%;">
                     <h5 class="card-title"><?php echo htmlspecialchars($row['alamat_222271']); ?></h5>
-                    <p class="card-text"><?php echo nl2br(htmlspecialchars($row['deskripsi_222271'])); ?></p>
+                    <p class="card-text"><?php echo htmlspecialchars($row['deskripsi_222271']); ?></p>
+
                     <p class="card-text"><strong>Harga:</strong> Rp <?php echo number_format((int)$row['harga_222271'], 0, ',', '.'); ?> / bulan</p>
 
                     <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#buyKosModal"
                         data-kos-name="<?php echo htmlspecialchars($row['alamat_222271']); ?>"
-                        data-kos-price="<?php echo htmlspecialchars($row['harga_222271']); ?>"
+                        data-kos-price="Rp <?php echo number_format($row['harga_222271'], 2, ',', '.'); ?>"
                         data-kamar-id="<?php echo htmlspecialchars($row['id_222271']); ?>">
                         <i class="fa-solid fa-cart-shopping"></i>&nbsp;Sewa Kamar
                     </button>
@@ -165,19 +168,6 @@ function format_harga($harga)
     </div>
 </div>
 
-<script>
-    // Set dynamic data for the rental modal
-    const buyKosModal = document.getElementById('buyKosModal');
-    buyKosModal.addEventListener('show.bs.modal', function(event) {
-        const button = event.relatedTarget;
-        const kosName = button.getAttribute('data-kos-name');
-        const kosPrice = button.getAttribute('data-kos-price');
-        const kamarId = button.getAttribute('data-kamar-id'); // Ambil id_kamar_222271 dari atribut data
 
-        document.getElementById('buyKosModalLabel').textContent = `Formulir Penyewaan: ${kosName}`;
-        document.getElementById('price').value = kosPrice; // Store the price in a hidden input field
-        document.getElementById('id_kamar_222271').value = kamarId; // Set id_kamar_222271 value in hidden input
-    });
-</script>
 
 <?php require 'templates/footer.php'; ?>
