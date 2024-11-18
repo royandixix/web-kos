@@ -35,7 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['loginUsername'])) {
         $_SESSION['user'] = $loginResult;
         $_SESSION['userPhoto'] = $loginResult['foto'];
         $_SESSION['userRole'] = $loginResult['role'];
-        header("Location: dhasboard.php");
+        header("Location: dhasboard2.php");
         exit;
     } else {
         echo "<script>alert('Username atau password salah!');</script>";

@@ -1,4 +1,5 @@
-# freeadmintemplate
-Free Inventory Management Admin-Dashboard Template Bootstrap 5.3 <br>
-[Live Demo
-](https://therichpost.com/free-inventory-management-admin-dashboard-template-bootstrap-5-3/)
+# freebootstrapadmin
+Free Bootstrap Admin Template for Inventory Management System<br>
+
+[live demo
+](https://therichpost.com/free-bootstrap-admin-template-for-inventory-management-system/)

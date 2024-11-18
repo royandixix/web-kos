@@ -1,31 +1,67 @@
 <?php
-// session_start();
-require 'config/fungsi.php'; // Pastikan file ini ada dan memiliki fungsi query()
+// Koneksi ke database
+require 'config/fungsi.php';
 
-// // Cek jika pengguna sudah login
-// if (!isset($_SESSION['user'])) {
-//     header("Location: login.php"); // Redirect ke halaman login jika belum login
-//     exit;
-// }
+// Check if an ID is passed in the URL
+if (isset($_GET['id'])) {
+    $id = $_GET['id'];
 
-// Ambil data dari tabel pengguna
-$sql = "SELECT 
-            id_222271 AS id,
-            nama_222271 AS nama,
-            email_222271 AS email,
-            nomorTelepon_222271 AS telepon,
-            role_222271 AS role,
-            foto_222271 AS foto
-        FROM pengguna_222271";
+    // Escape ID to prevent SQL Injection
+    $id = mysqli_real_escape_string($db, $id);
 
-$rows = query($sql); // Fungsi query untuk menjalankan SQL dan mengambil data
+    // Fetch existing data from the database
+    $query = "SELECT * FROM kamar_222271 WHERE id_222271 = $id";
+    $result = mysqli_query($db, $query);
 
+    if (mysqli_num_rows($result) > 0) {
+        $row = mysqli_fetch_assoc($result);
+    } else {
+        echo "Data not found.";
+        exit;
+    }
+} else {
+    echo "No ID provided.";
+    exit;
+}
 
-// Ambil total penghuni
-$totalPenghuniQuery = query("SELECT COUNT(*) AS total FROM pengguna_222271");
-$totalPenghuni = $totalPenghuniQuery[0]['total'] ?? 0; // Default ke 0 jika tidak ada
+// If the form is submitted, update the data
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Escape user inputs to prevent SQL Injection
+    $alamat = mysqli_real_escape_string($db, $_POST['alamat']);
+    $harga = mysqli_real_escape_string($db, $_POST['harga']);
+    $status = mysqli_real_escape_string($db, $_POST['status']);
+    $deskripsi = mysqli_real_escape_string($db, $_POST['deskripsi']);
+    $tanggal_tersedia = mysqli_real_escape_string($db, $_POST['tanggal_tersedia']);
+    $fasilitas = mysqli_real_escape_string($db, $_POST['fasilitas']);
+    $ukuran = mysqli_real_escape_string($db, $_POST['ukuran']);
+    $rating = mysqli_real_escape_string($db, $_POST['rating']);
+
+    // Update the database
+    $update_query = "UPDATE kamar_222271 SET 
+        alamat_222271 = '$alamat', 
+        harga_222271 = '$harga', 
+        status_222271 = '$status', 
+        deskripsi_222271 = '$deskripsi', 
+        tanggal_tersedia_222271 = '$tanggal_tersedia', 
+        fasilitas_222271 = '$fasilitas', 
+        ukuran_222271 = '$ukuran', 
+        rating_222271 = '$rating' 
+        WHERE id_222271 = $id";
+
+    if (mysqli_query($db, $update_query)) {
+        // Redirect to the main page after successful update
+        header("Location: index.php?message=Data Updated Successfully");
+        exit;
+    } else {
+        echo "Error updating record: " . mysqli_error($db);
+    }
+}
+$rows = mysqli_query($db, "SELECT * FROM kamar_222271");
+// Menghitung total pengguna
+$totalPenghuniQuery = mysqli_query($db, "SELECT COUNT(*) AS total FROM pengguna_222271");
+$totalPenghuni = mysqli_fetch_assoc($totalPenghuniQuery)['total'] ?? 0;
+
 ?>
-
 
 
 
@@ -47,6 +83,31 @@ $totalPenghuni = $totalPenghuniQuery[0]['total'] ?? 0; // Default ke 0 jika tida
     <!-- Custom Stylesheet -->
     <link href="main/css/style.css" rel="stylesheet" />
 </head>
+<style>
+    .table-responsive {
+        max-height: 500px;
+        overflow-y: auto;
+    }
+
+    .table th,
+    .table td {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    @media (max-width: 768px) {
+        .table-responsive {
+            max-height: none;
+        }
+
+        .table th,
+        .table td {
+            font-size: 12px;
+            padding: 8px;
+        }
+    }
+</style>
 
 <body>
     <!--*******************
@@ -352,7 +413,7 @@ $totalPenghuni = $totalPenghuniQuery[0]['total'] ?? 0; // Default ke 0 jika tida
                         </a>
                     </li>
                     <li>
-                        <a href="dataAdmin.php">
+                        <a href="dataAdmin2.php">
                             <i class="fa fa-user-circle menu-icon"></i><span class="nav-text">Data Admin Kost</span>
                         </a>
                     </li>
@@ -373,7 +434,7 @@ $totalPenghuni = $totalPenghuniQuery[0]['total'] ?? 0; // Default ke 0 jika tida
                     </li>
 
                     <li>
-                        <a href="index.php">
+                        <a href="./logout.html">
                             <i class="fa fa-sign-out menu-icon"></i><span class="nav-text">Keluar</span>
                         </a>
                     </li>
@@ -454,45 +515,78 @@ $totalPenghuni = $totalPenghuniQuery[0]['total'] ?? 0; // Default ke 0 jika tida
                         <div class="card shadow-sm">
                             <div class="card-body">
                                 <div class="active-member">
-                                    <!-- Judul -->
-                                    <h4 class="card-title text-left mb-4">
-                                        Semua Pengguna yang Telah Bergabung dan Aktif di Sistem
-                                    </h4>
-                                    <div class="table-responsive">
-                                        <div class="table-responsive">
-                                            <table class="table table-striped table-bordered table-hover">
-                                                <thead class="thead-dark">
-                                                    <tr class="text-center">
-                                                        <th>No</th>
-                                                        <th>Profil</th>
-                                                        <th>Nama</th>
-                                                        <th>Email</th>
-                                                        <th>No HP</th>
-                                                        <th>Role</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <?php $no = 1;
-                                                    foreach ($rows as $row): ?>
-                                                        <tr>
-                                                            <td class="text-center"><?php echo $no++; ?></td>
-                                                            <td class="text-center">
-                                                                <img
-                                                                    src="<?php echo htmlspecialchars($row['foto']); ?>"
-                                                                    alt="Foto Profil"
-                                                                    class="img-fluid rounded-circle"
-                                                                    style="width: 50px; height: 50px; object-fit: cover;">
-                                                            </td>
-                                                            <td><?php echo htmlspecialchars($row['nama']); ?></td>
-                                                            <td><?php echo htmlspecialchars($row['email']); ?></td>
-                                                            <td><?php echo htmlspecialchars($row['telepon']); ?></td>
-                                                            <td class="text-center"><?php echo htmlspecialchars($row['role']); ?></td>
-                                                        </tr>
-                                                    <?php endforeach; ?>
-                                                </tbody>
-                                            </table>
-                                        </div>
+                                    <div class="details">
+                                        <div class="recentOrders">
+                                            <div class="cardHeader">
+                                                <h2>Edit Kamar Kos</h2>
+                                            </div>
+                                            <form action="" method="POST" enctype="multipart/form-data">
+                                                <!-- ID Kamar -->
+                                                <input type="hidden" name="id_222271" value="<?= htmlspecialchars($row['id_222271']); ?>">
 
+                                                <!-- Alamat -->
+                                                <div class="form-group">
+                                                    <label for="alamat_222271">Alamat</label>
+                                                    <input type="text" name="alamat_222271" id="alamat_222271" class="form-control" value="<?= htmlspecialchars($row['alamat_222271']); ?>" required>
+                                                </div>
+
+                                                <!-- Harga -->
+                                                <div class="form-group">
+                                                    <label for="harga_222271">Harga</label>
+                                                    <input type="text" name="harga_222271" id="harga_222271" class="form-control" value="<?= htmlspecialchars($row['harga_222271']); ?>" required>
+                                                </div>
+
+                                                <!-- Status -->
+                                                <div class="form-group">
+                                                    <label for="status_222271">Status</label>
+                                                    <select name="status_222271" id="status_222271" class="form-control" required>
+                                                        <option value="tersedia" <?= $row['status_222271'] === 'tersedia' ? 'selected' : ''; ?>>Tersedia</option>
+                                                        <option value="tidak tersedia" <?= $row['status_222271'] === 'tidak tersedia' ? 'selected' : ''; ?>>Tidak Tersedia</option>
+                                                    </select>
+                                                </div>
+
+                                                <!-- Deskripsi -->
+                                                <div class="form-group">
+                                                    <label for="deskripsi_222271">Deskripsi</label>
+                                                    <textarea name="deskripsi_222271" id="deskripsi_222271" class="form-control" required><?= htmlspecialchars($row['deskripsi_222271']); ?></textarea>
+                                                </div>
+
+                                                <!-- Tanggal -->
+                                                <div class="form-group">
+                                                    <label for="tanggal_tersedia_222271">Tanggal Tersedia</label>
+                                                    <input type="date" name="tanggal_tersedia_222271" id="tanggal_tersedia_222271" class="form-control" value="<?= htmlspecialchars($row['tanggal_tersedia_222271']); ?>" required>
+                                                </div>
+
+                                                <!-- Fasilitas -->
+                                                <div class="form-group">
+                                                    <label for="fasilitas_222271">Fasilitas</label>
+                                                    <input type="text" name="fasilitas_222271" id="fasilitas_222271" class="form-control" value="<?= htmlspecialchars($row['fasilitas_222271']); ?>" required>
+                                                </div>
+
+                                                <!-- Ukuran -->
+                                                <div class="form-group">
+                                                    <label for="ukuran_222271">Ukuran</label>
+                                                    <input type="text" name="ukuran_222271" id="ukuran_222271" class="form-control" value="<?= htmlspecialchars($row['ukuran_222271']); ?>" required>
+                                                </div>
+
+                                                <!-- Rating -->
+                                                <div class="form-group">
+                                                    <label for="rating_222271">Rating</label>
+                                                    <input type="number" step="0.1" name="rating_222271" id="rating_222271" class="form-control" value="<?= htmlspecialchars($row['rating_222271']); ?>" required>
+                                                </div>
+
+                                                <!-- Foto -->
+                                                <div class="form-group">
+                                                    <label for="foto_222271">Foto</label>
+                                                    <input type="file" name="foto_222271" id="foto_222271" class="form-control">
+                                                    <p>Foto saat ini: <img src="<?= htmlspecialchars($row['foto_222271']); ?>" alt="Foto" width="100"></p>
+                                                </div>
+
+                                                <!-- Tombol Submit -->
+                                                <button type="submit" name="update" class="btn btn-primary">Update</button>
+                                            </form>
+
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -502,35 +596,50 @@ $totalPenghuni = $totalPenghuniQuery[0]['total'] ?? 0; // Default ke 0 jika tida
 
 
 
+                <!-- Tambahkan Script jQuery -->
+                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                <script>
+                    $(document).ready(function() {
+                        // Memuat data tabel pertama kali
+                        loadData();
 
-                <!-- #/ container -->
-            </div>
+                        // Fungsi untuk memuat data tabel melalui AJAX
+                        function loadData() {
+                            $.ajax({
+                                url: 'ambil_data.php', // File PHP untuk mengambil data
+                                type: 'GET',
+                                success: function(response) {
+                                    $('#tabelData').html(response);
+                                }
+                            });
+                        }
+                    });
+                </script>
+                <script src="main/js/common.min.js"></script>
+                <script src="main/js/custom.min.js"></script>
+                <script src="main/js/settings.js"></script>
+                <script src="main/js/gleek.js"></script>
+                <script src="main/js/styleSwitcher.js"></script>
 
-            <script src="main/js/common.min.js"></script>
-            <script src="main/js/custom.min.js"></script>
-            <script src="main/js/settings.js"></script>
-            <script src="main/js/gleek.js"></script>
-            <script src="main/js/styleSwitcher.js"></script>
+                <!-- Chartjs -->
+                <script src="main/js/Chart.bundle.min.js"></script>
+                <!-- Circle progress -->
+                <script src="main/js/circle-progress.min.js"></script>
+                <!-- Datamap -->
+                <script src="main/js/index.js"></script>
+                <script src="main/js/topojson.min.js"></script>
+                <script src="main/js/datamaps.world.min.js"></script>
+                <!-- Morrisjs -->
+                <script src="main/js/raphael.min.js"></script>
+                <script src="main/js/morris.min.js"></script>
+                <!-- Pignose Calender -->
+                <script src="main/js/moment.min.js"></script>
+                <script src="main/js/pignose.calendar.min.js"></script>
+                <!-- ChartistJS -->
+                <script src="main/js/chartist.min.js"></script>
+                <script src="main/js/chartist-plugin-tooltip.min.js"></script>
 
-            <!-- Chartjs -->
-            <script src="main/js/Chart.bundle.min.js"></script>
-            <!-- Circle progress -->
-            <script src="main/js/circle-progress.min.js"></script>
-            <!-- Datamap -->
-            <script src="main/js/index.js"></script>
-            <script src="main/js/topojson.min.js"></script>
-            <script src="main/js/datamaps.world.min.js"></script>
-            <!-- Morrisjs -->
-            <script src="main/js/raphael.min.js"></script>
-            <script src="main/js/morris.min.js"></script>
-            <!-- Pignose Calender -->
-            <script src="main/js/moment.min.js"></script>
-            <script src="main/js/pignose.calendar.min.js"></script>
-            <!-- ChartistJS -->
-            <script src="main/js/chartist.min.js"></script>
-            <script src="main/js/chartist-plugin-tooltip.min.js"></script>
-
-            <script src="main/js/dashboard-1.js"></script>
+                <script src="main/js/dashboard-1.js"></script>
 </body>
 
 </html>

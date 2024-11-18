@@ -1,33 +1,22 @@
 <?php
-// session_start();
-require 'config/fungsi.php'; // Pastikan file ini ada dan memiliki fungsi query()
+require 'config/fungsi.php';
 
-// // Cek jika pengguna sudah login
-// if (!isset($_SESSION['user'])) {
-//     header("Location: login.php"); // Redirect ke halaman login jika belum login
-//     exit;
-// }
+// Query untuk mendapatkan data
+$query = "SELECT * FROM kamar_222271";
+$result = mysqli_query($db, $query);
 
-// Ambil data dari tabel pengguna
-$sql = "SELECT 
-            id_222271 AS id,
-            nama_222271 AS nama,
-            email_222271 AS email,
-            nomorTelepon_222271 AS telepon,
-            role_222271 AS role,
-            foto_222271 AS foto
-        FROM pengguna_222271";
+// Periksa apakah ada data
+if (!$result) {
+    die("Query error: " . mysqli_error($db));
+}
 
-$rows = query($sql); // Fungsi query untuk menjalankan SQL dan mengambil data
+// Simpan hasil query ke dalam array menggunakan mysqli_fetch_all
+$data_kamar = mysqli_fetch_all($result, MYSQLI_ASSOC);
+$rows = query("SELECT * FROM penyewaan_kos_222271");
 
-
-// Ambil total penghuni
 $totalPenghuniQuery = query("SELECT COUNT(*) AS total FROM pengguna_222271");
-$totalPenghuni = $totalPenghuniQuery[0]['total'] ?? 0; // Default ke 0 jika tidak ada
+$totalPenghuni = $totalPenghuniQuery[0]['total'] ?? 0; // Mengambil total atau default ke 0 jika tidak ada
 ?>
-
-
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -47,6 +36,31 @@ $totalPenghuni = $totalPenghuniQuery[0]['total'] ?? 0; // Default ke 0 jika tida
     <!-- Custom Stylesheet -->
     <link href="main/css/style.css" rel="stylesheet" />
 </head>
+<style>
+    .table-responsive {
+        max-height: 500px;
+        overflow-y: auto;
+    }
+
+    .table th,
+    .table td {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    @media (max-width: 768px) {
+        .table-responsive {
+            max-height: none;
+        }
+
+        .table th,
+        .table td {
+            font-size: 12px;
+            padding: 8px;
+        }
+    }
+</style>
 
 <body>
     <!--*******************
@@ -352,7 +366,7 @@ $totalPenghuni = $totalPenghuniQuery[0]['total'] ?? 0; // Default ke 0 jika tida
                         </a>
                     </li>
                     <li>
-                        <a href="dataAdmin.php">
+                        <a href="dataAdmin2.php">
                             <i class="fa fa-user-circle menu-icon"></i><span class="nav-text">Data Admin Kost</span>
                         </a>
                     </li>
@@ -456,56 +470,129 @@ $totalPenghuni = $totalPenghuniQuery[0]['total'] ?? 0; // Default ke 0 jika tida
                                 <div class="active-member">
                                     <!-- Judul -->
                                     <h4 class="card-title text-left mb-4">
-                                        Semua Pengguna yang Telah Bergabung dan Aktif di Sistem
+                                        Data Transaksi Pembayaran
                                     </h4>
+
+                                    <!-- Tombol Tambah Data -->
+                                    <div class="mb-3 text-right">
+                                        <a href="addKamar2.php" class="btn btn-primary">
+                                            <i class="fas fa-plus"></i> Tambah Data
+                                        </a>
+                                    </div>
+
+                                    <!-- Tabel -->
                                     <div class="table-responsive">
-                                        <div class="table-responsive">
-                                            <table class="table table-striped table-bordered table-hover">
-                                                <thead class="thead-dark">
-                                                    <tr class="text-center">
-                                                        <th>No</th>
-                                                        <th>Profil</th>
-                                                        <th>Nama</th>
-                                                        <th>Email</th>
-                                                        <th>No HP</th>
-                                                        <th>Role</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <?php $no = 1;
-                                                    foreach ($rows as $row): ?>
+                                        <table class="table table-striped table-bordered table-hover" id="tabelData">
+                                            <thead>
+                                                <tr>
+                                                    <th>No</th>
+                                                    <th>Alamat</th>
+                                                    <th>Harga</th>
+                                                    <th>Status</th>
+                                                    <th>Deskripsi</th>
+                                                    <th>Tanggal Dipaparkan</th>
+                                                    <th>Fasilitas</th>
+                                                    <th>Foto</th>
+                                                    <th>Ukuran</th>
+                                                    <th>Rating</th>
+                                                    <th>Aksi</th> <!-- Kolom Aksi -->
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php if (!empty($data_kamar)): ?>
+                                                    <?php foreach ($data_kamar as $index => $row): ?>
                                                         <tr>
-                                                            <td class="text-center"><?php echo $no++; ?></td>
-                                                            <td class="text-center">
-                                                                <img
-                                                                    src="<?php echo htmlspecialchars($row['foto']); ?>"
-                                                                    alt="Foto Profil"
-                                                                    class="img-fluid rounded-circle"
-                                                                    style="width: 50px; height: 50px; object-fit: cover;">
+                                                            <!-- Kolom Nomor -->
+                                                            <td><?php echo $index + 1; ?></td>
+
+                                                            <!-- Kolom Alamat -->
+                                                            <td><?php echo htmlspecialchars($row['alamat_222271']); ?></td>
+
+                                                            <!-- Kolom Harga -->
+                                                            <td><?php echo htmlspecialchars(number_format($row['harga_222271'], 2, ',', '.')); ?></td>
+
+                                                            <!-- Kolom Status -->
+                                                            <td><?php echo htmlspecialchars($row['status_222271']); ?></td>
+
+                                                            <!-- Kolom Deskripsi -->
+                                                            <td><?php echo htmlspecialchars($row['deskripsi_222271']); ?></td>
+
+                                                            <!-- Kolom Tanggal Tersedia -->
+                                                            <td><?php echo htmlspecialchars($row['tanggal_tersedia_222271']); ?></td>
+
+                                                            <!-- Kolom Fasilitas -->
+                                                            <td><?php echo htmlspecialchars($row['fasilitas_222271']); ?></td>
+
+                                                            <!-- Kolom Foto -->
+                                                            <td>
+                                                                <?php
+                                                                $foto_path = htmlspecialchars($row['foto_222271']);
+                                                                $upload_dir = 'uploads/';
+                                                                $full_path = $upload_dir . $foto_path;
+
+                                                                if (!empty($foto_path) && file_exists($full_path)) {
+                                                                    echo '<img src="' . $full_path . '" alt="Foto Kamar" style="width: 170px; height: auto; border: 1px solid #ddd; padding: 5px;">';
+                                                                } else {
+                                                                    echo '<img src="uploads/placeholder.jpg" alt="Foto Tidak Tersedia" style="width: 200px; height: auto;">';
+                                                                }
+                                                                ?>
                                                             </td>
-                                                            <td><?php echo htmlspecialchars($row['nama']); ?></td>
-                                                            <td><?php echo htmlspecialchars($row['email']); ?></td>
-                                                            <td><?php echo htmlspecialchars($row['telepon']); ?></td>
-                                                            <td class="text-center"><?php echo htmlspecialchars($row['role']); ?></td>
+
+                                                            <!-- Kolom Ukuran -->
+                                                            <td><?php echo htmlspecialchars($row['ukuran_222271']); ?></td>
+
+                                                            <!-- Kolom Rating -->
+                                                            <td><?php echo htmlspecialchars($row['rating_222271']); ?></td>
+
+                                                            <!-- Kolom Aksi (Edit dan Hapus) -->
+                                                            <td class="text-center">
+                                                                <!-- Tombol Edit -->
+                                                                <a href="editkamarkost2.php?id=<?php echo htmlspecialchars($row['id_222271']); ?>" class="btn btn-warning btn-sm">
+                                                                    <i class="fas fa-edit"></i> Edit
+                                                                </a>
+
+
+                                                                <!-- Tombol Hapus -->
+                                                                <a href="hapus_data.php?id=<?php echo htmlspecialchars($row['id_222271']); ?>" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?');">
+                                                                    <i class="fas fa-trash"></i> Hapus
+                                                                </a>
+                                                            </td>
                                                         </tr>
                                                     <?php endforeach; ?>
-                                                </tbody>
-                                            </table>
-                                        </div>
-
+                                                <?php else: ?>
+                                                    <tr>
+                                                        <td colspan="11" class="text-center">Tidak ada data kamar yang tersedia.</td>
+                                                    </tr>
+                                                <?php endif; ?>
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
-
-
-
-                <!-- #/ container -->
             </div>
 
+            <!-- Tambahkan Script jQuery -->
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+            <script>
+                $(document).ready(function() {
+                    // Memuat data tabel pertama kali
+                    loadData();
+
+                    // Fungsi untuk memuat data tabel melalui AJAX
+                    function loadData() {
+                        $.ajax({
+                            url: 'ambil_data.php', // File PHP untuk mengambil data
+                            type: 'GET',
+                            success: function(response) {
+                                $('#tabelData').html(response);
+                            }
+                        });
+                    }
+                });
+            </script>
             <script src="main/js/common.min.js"></script>
             <script src="main/js/custom.min.js"></script>
             <script src="main/js/settings.js"></script>

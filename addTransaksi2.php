@@ -1,6 +1,7 @@
 <?php
-// session_start();
-require 'config/fungsi.php'; // Pastikan file ini ada dan memiliki fungsi query()
+session_start(); // Pastikan ini di awal file
+
+require 'config/fungsi.php'; // Pindahkan ini setelah session_start()
 
 // // Cek jika pengguna sudah login
 // if (!isset($_SESSION['user'])) {
@@ -8,26 +9,55 @@ require 'config/fungsi.php'; // Pastikan file ini ada dan memiliki fungsi query(
 //     exit;
 // }
 
-// Ambil data dari tabel pengguna
-$sql = "SELECT 
-            id_222271 AS id,
-            nama_222271 AS nama,
-            email_222271 AS email,
-            nomorTelepon_222271 AS telepon,
-            role_222271 AS role,
-            foto_222271 AS foto
-        FROM pengguna_222271";
+// // Cek apakah pengguna adalah admin
+// if ($_SESSION['user']['role'] !== 'admin') {
+//     header("Location: index.php"); // Redirect ke halaman beranda jika bukan admin
+//     exit;
+// }
 
-$rows = query($sql); // Fungsi query untuk menjalankan SQL dan mengambil data
+/// Ambil data dari tabel 'pengguna_222271' yang hanya memiliki role admin
+// Ambil data pengguna
+$rows = query("SELECT * FROM pengguna_222271");
 
-
-// Ambil total penghuni
+// Mengambil total pengguna
 $totalPenghuniQuery = query("SELECT COUNT(*) AS total FROM pengguna_222271");
-$totalPenghuni = $totalPenghuniQuery[0]['total'] ?? 0; // Default ke 0 jika tidak ada
+$totalPenghuni = isset($totalPenghuniQuery[0]['total']) ? $totalPenghuniQuery[0]['total'] : 0;
+
+// Mengambil data transaksi dengan join untuk mengambil nama penghuni langsung
+$rowsTransaksi = query("SELECT t.*, p.nama_222271 
+                        FROM transaksi_222271 t 
+                        JOIN penyewaan_kos_222271 p ON t.penghuni_id_222271 = p.id_222271");
+
+// Mengambil total transaksi
+$totalTransaksiQuery = query("SELECT COUNT(*) AS total FROM transaksi_222271");
+$totalTransaksi = isset($totalTransaksiQuery[0]['total']) ? $totalTransaksiQuery[0]['total'] : 0;
+
+if (isset($_POST['login'])) {
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+
+    // Cek apakah username dan password sudah diisi
+    if (empty($username) || empty($password)) {
+        $error = "Username dan password harus diisi!";
+    } else {
+        $user = loginPengguna($username, $password);
+
+        // Cek apakah pengguna ditemukan
+        if ($user) {
+            // Simpan informasi pengguna ke dalam sesi
+            $_SESSION['user'] = [
+                'name' => $user['nama_222271'],
+                'role' => $user['role_222271'],
+                'profile_pic' => 'uploads/' . $user['profile_pic']
+            ];
+            header("Location: dashboard.php"); // Redirect ke halaman dashboard
+            exit;
+        } else {
+            $error = "Username atau password salah!";
+        }
+    }
+}
 ?>
-
-
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -352,7 +382,7 @@ $totalPenghuni = $totalPenghuniQuery[0]['total'] ?? 0; // Default ke 0 jika tida
                         </a>
                     </li>
                     <li>
-                        <a href="dataAdmin.php">
+                        <a href="dataAdmin2.php">
                             <i class="fa fa-user-circle menu-icon"></i><span class="nav-text">Data Admin Kost</span>
                         </a>
                     </li>
@@ -456,43 +486,48 @@ $totalPenghuni = $totalPenghuniQuery[0]['total'] ?? 0; // Default ke 0 jika tida
                                 <div class="active-member">
                                     <!-- Judul -->
                                     <h4 class="card-title text-left mb-4">
-                                        Semua Pengguna yang Telah Bergabung dan Aktif di Sistem
+                                        Data Transaksi Pembayaran
                                     </h4>
-                                    <div class="table-responsive">
-                                        <div class="table-responsive">
-                                            <table class="table table-striped table-bordered table-hover">
-                                                <thead class="thead-dark">
-                                                    <tr class="text-center">
-                                                        <th>No</th>
-                                                        <th>Profil</th>
-                                                        <th>Nama</th>
-                                                        <th>Email</th>
-                                                        <th>No HP</th>
-                                                        <th>Role</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <?php $no = 1;
-                                                    foreach ($rows as $row): ?>
-                                                        <tr>
-                                                            <td class="text-center"><?php echo $no++; ?></td>
-                                                            <td class="text-center">
-                                                                <img
-                                                                    src="<?php echo htmlspecialchars($row['foto']); ?>"
-                                                                    alt="Foto Profil"
-                                                                    class="img-fluid rounded-circle"
-                                                                    style="width: 50px; height: 50px; object-fit: cover;">
-                                                            </td>
-                                                            <td><?php echo htmlspecialchars($row['nama']); ?></td>
-                                                            <td><?php echo htmlspecialchars($row['email']); ?></td>
-                                                            <td><?php echo htmlspecialchars($row['telepon']); ?></td>
-                                                            <td class="text-center"><?php echo htmlspecialchars($row['role']); ?></td>
-                                                        </tr>
-                                                    <?php endforeach; ?>
-                                                </tbody>
-                                            </table>
-                                        </div>
 
+                                    <!-- Tabel -->
+                                    <div class="table-responsive">
+                                        <table class="table table-striped table-bordered table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>No</th>
+                                                    <th>Nama</th>
+                                                    <th>Metode Pembayaran</th>
+                                                    <th>Harga</th>
+                                                    <th>Aksi</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php
+                                                // Menampilkan data transaksi
+                                                if ($rowsTransaksi) {
+                                                    $index = 1; // Inisialisasi untuk nomor urut
+                                                    foreach ($rowsTransaksi as $row) {
+                                                ?>
+                                                        <tr>
+                                                            <td><?php echo $index++; ?></td>
+                                                            <td><?php echo htmlspecialchars($row['nama_222271']); ?></td> <!-- Nama Penghuni langsung dari hasil query -->
+                                                            <td><?php echo htmlspecialchars($row['jenis_transaksi_222271']); ?></td>
+                                                            <td><?php echo number_format($row['jumlah_222271'], 2, ',', '.'); ?></td>
+
+                                                            <td>
+                                                                <!-- Tombol untuk aksi -->
+                                                                <button class="btn btn-primary btn-sm mr-2">Edit</button>
+                                                                <button class="btn btn-danger btn-sm">Hapus</button>
+                                                            </td>
+                                                        </tr>
+                                                <?php
+                                                    }
+                                                } else {
+                                                    echo "<tr><td colspan='5' class='text-center'>Tidak ada data transaksi.</td></tr>";
+                                                }
+                                                ?>
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                             </div>

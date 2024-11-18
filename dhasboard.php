@@ -298,10 +298,10 @@ if (isset($_POST['login'])) {
                     <table>
                         <thead>
                             <tr>
-                                <th>No</th>
-                                <th>Nama</th>
-                                <th>Email</th>
-                                <th>No HP</th>
+                                    <th>No</th>
+                                    <th>Nama</th>
+                                    <th>Email</th>
+                                    <th>No HP</th>
                             </tr>
                         </thead>
                         <tbody>

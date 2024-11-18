@@ -1,6 +1,7 @@
 <?php
-// session_start();
-require 'config/fungsi.php'; // Pastikan file ini ada dan memiliki fungsi query()
+
+
+require 'config/fungsi.php'; // Pindahkan ini setelah session_start()
 
 // // Cek jika pengguna sudah login
 // if (!isset($_SESSION['user'])) {
@@ -8,26 +9,38 @@ require 'config/fungsi.php'; // Pastikan file ini ada dan memiliki fungsi query(
 //     exit;
 // }
 
-// Ambil data dari tabel pengguna
-$sql = "SELECT 
-            id_222271 AS id,
-            nama_222271 AS nama,
-            email_222271 AS email,
-            nomorTelepon_222271 AS telepon,
-            role_222271 AS role,
-            foto_222271 AS foto
-        FROM pengguna_222271";
+// // Cek apakah pengguna adalah admin
+// if ($_SESSION['user']['role'] !== 'admin') {
+//     header("Location: index.php"); // Redirect ke halaman beranda jika bukan admin
+//     exit;
+// }
 
-$rows = query($sql); // Fungsi query untuk menjalankan SQL dan mengambil data
+/// Ambil data dari tabel 'pengguna_222271' yang hanya memiliki role admin
+$rows = query("SELECT * FROM pengguna_222271 WHERE role_222271 = 'user'");
 
 
-// Ambil total penghuni
 $totalPenghuniQuery = query("SELECT COUNT(*) AS total FROM pengguna_222271");
-$totalPenghuni = $totalPenghuniQuery[0]['total'] ?? 0; // Default ke 0 jika tidak ada
+$totalPenghuni = $totalPenghuniQuery[0]['total'] ?? 0; // Mengambil total atau default ke 0 jika tidak ada
+
+if (isset($_POST['login'])) {
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+
+    $user = loginPengguna($db, $username, $password);
+    if ($user) {
+        // Simpan informasi pengguna ke dalam sesi
+        $_SESSION['user'] = [
+            'name' => $user['nama_222271'],
+            'role' => $user['role_222271'],
+            'profile_pic' => 'uploads/' . $user['profile_pic'] // Menyimpan path lengkap ke foto
+        ];
+        header("Location: dhasboard.php"); // Redirect ke halaman dashboard
+        exit;
+    } else {
+        $error = "Username atau password salah!";
+    }
+}
 ?>
-
-
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -345,14 +358,14 @@ $totalPenghuni = $totalPenghuniQuery[0]['total'] ?? 0; // Default ke 0 jika tida
                             <i class="fa fa-tachometer menu-icon"></i><span class="nav-text">Dashboard</span>
                         </a>
                     </li>
-
+                 
                     <li>
                         <a href="dataUser2.php">
                             <i class="fa fa-users menu-icon"></i><span class="nav-text">Penghuni Kost</span>
                         </a>
                     </li>
                     <li>
-                        <a href="dataAdmin.php">
+                        <a href="dataAdmin2.php">
                             <i class="fa fa-user-circle menu-icon"></i><span class="nav-text">Data Admin Kost</span>
                         </a>
                     </li>
@@ -380,7 +393,6 @@ $totalPenghuni = $totalPenghuniQuery[0]['total'] ?? 0; // Default ke 0 jika tida
                 </ul>
             </div>
         </div>
-
         <!--**********************************
             Sidebar end
         ***********************************-->
@@ -455,50 +467,53 @@ $totalPenghuni = $totalPenghuniQuery[0]['total'] ?? 0; // Default ke 0 jika tida
                             <div class="card-body">
                                 <div class="active-member">
                                     <!-- Judul -->
-                                    <h4 class="card-title text-left mb-4">
-                                        Semua Pengguna yang Telah Bergabung dan Aktif di Sistem
-                                    </h4>
+                                    <h4 class="card-title text-left mb-4">Data Penghuni Kos</h4>
+
+                                    <!-- Tabel -->
                                     <div class="table-responsive">
-                                        <div class="table-responsive">
-                                            <table class="table table-striped table-bordered table-hover">
-                                                <thead class="thead-dark">
-                                                    <tr class="text-center">
-                                                        <th>No</th>
-                                                        <th>Profil</th>
-                                                        <th>Nama</th>
-                                                        <th>Email</th>
-                                                        <th>No HP</th>
-                                                        <th>Role</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <?php $no = 1;
-                                                    foreach ($rows as $row): ?>
+                                        <table class="table table-striped table-bordered table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>No</th>
+                                                    <th>Nama</th>
+                                                    <th>Email</th>
+                                                    <th>No HP</th>
+                                                    <th>Role</th>
+                                                    <th>Aksi</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php if (!empty($rows)): ?>
+                                                    <?php $no = 1; ?>
+                                                    <?php foreach ($rows as $row): ?>
                                                         <tr>
-                                                            <td class="text-center"><?php echo $no++; ?></td>
-                                                            <td class="text-center">
-                                                                <img
-                                                                    src="<?php echo htmlspecialchars($row['foto']); ?>"
-                                                                    alt="Foto Profil"
-                                                                    class="img-fluid rounded-circle"
-                                                                    style="width: 50px; height: 50px; object-fit: cover;">
+                                                            <td><?php echo $no++; ?></td>
+                                                            <td><?php echo htmlspecialchars($row['nama_222271'] ?? ''); ?></td>
+                                                            <td><?php echo htmlspecialchars($row['email_222271'] ?? ''); ?></td>
+                                                            <td><?php echo htmlspecialchars($row['nomorTelepon_222271'] ?? ''); ?></td>
+                                                            <td><?php echo htmlspecialchars($row['role_222271'] ?? ''); ?></td>
+                                                            <td>
+                                                                <a href="edit3.php?id=<?php echo urlencode($row['id_222271'] ?? ''); ?>" class="btn btn-warning btn-sm">Edit</a>
+                                                                <a href="delete.php?id=<?php echo urlencode($row['id_222271'] ?? ''); ?>"
+                                                                    class="btn btn-danger btn-sm"
+                                                                    onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">Hapus</a>
                                                             </td>
-                                                            <td><?php echo htmlspecialchars($row['nama']); ?></td>
-                                                            <td><?php echo htmlspecialchars($row['email']); ?></td>
-                                                            <td><?php echo htmlspecialchars($row['telepon']); ?></td>
-                                                            <td class="text-center"><?php echo htmlspecialchars($row['role']); ?></td>
                                                         </tr>
                                                     <?php endforeach; ?>
-                                                </tbody>
-                                            </table>
-                                        </div>
-
+                                                <?php else: ?>
+                                                    <tr>
+                                                        <td colspan="6" class="text-center">Tidak ada data</td>
+                                                    </tr>
+                                                <?php endif; ?>
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
 
 
 

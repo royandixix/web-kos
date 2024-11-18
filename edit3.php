@@ -1,32 +1,74 @@
 <?php
-// session_start();
-require 'config/fungsi.php'; // Pastikan file ini ada dan memiliki fungsi query()
+// Koneksi ke database
+require 'config/fungsi.php';
 
-// // Cek jika pengguna sudah login
-// if (!isset($_SESSION['user'])) {
-//     header("Location: login.php"); // Redirect ke halaman login jika belum login
-//     exit;
-// }
+// Ambil ID pengguna dari URL atau form
+$id_pengguna = isset($_GET['id']) ? intval($_GET['id']) : 0; // ID dari URL, pastikan menggunakan method GET
 
-// Ambil data dari tabel pengguna
-$sql = "SELECT 
-            id_222271 AS id,
-            nama_222271 AS nama,
-            email_222271 AS email,
-            nomorTelepon_222271 AS telepon,
-            role_222271 AS role,
-            foto_222271 AS foto
-        FROM pengguna_222271";
+// Periksa apakah ID valid
+if ($id_pengguna <= 0) {
+    die("ID tidak valid.");
+}
 
-$rows = query($sql); // Fungsi query untuk menjalankan SQL dan mengambil data
+// Ambil data pengguna berdasarkan ID
+$query = "SELECT * FROM pengguna_222271 WHERE id_222271 = $id_pengguna";
+$result = mysqli_query($db, $query);
 
+// Periksa apakah data ditemukan
+if (!$result || mysqli_num_rows($result) === 0) {
+    die("Data tidak ditemukan.");
+}
 
-// Ambil total penghuni
-$totalPenghuniQuery = query("SELECT COUNT(*) AS total FROM pengguna_222271");
-$totalPenghuni = $totalPenghuniQuery[0]['total'] ?? 0; // Default ke 0 jika tidak ada
+$data = mysqli_fetch_assoc($result);
+
+// Proses update data
+if (isset($_POST['update'])) {
+    // Ambil data dari form
+    $nama = mysqli_real_escape_string($db, $_POST['nama_222271']);
+    $email = mysqli_real_escape_string($db, $_POST['email_222271']);
+    $username = mysqli_real_escape_string($db, $_POST['username_222271']);
+    $nomorTelepon = mysqli_real_escape_string($db, $_POST['nomorTelepon_222271']);
+    $role = mysqli_real_escape_string($db, $_POST['role_222271']);
+
+    // Handle upload foto baru
+    $foto = $data['foto_222271']; // Foto lama sebagai default
+    if (isset($_FILES['foto_222271']) && $_FILES['foto_222271']['error'] === UPLOAD_ERR_OK) {
+        $uploadDir = 'uploads/';
+        $fotoName = basename($_FILES['foto_222271']['name']);
+        $targetFile = $uploadDir . $fotoName;
+
+        if (move_uploaded_file($_FILES['foto_222271']['tmp_name'], $targetFile)) {
+            $foto = $targetFile; // Update dengan foto baru
+        } else {
+            echo "<script>alert('Gagal mengupload foto.');</script>";
+        }
+    }
+
+    // Query update
+    $update_query = "UPDATE pengguna_222271 SET 
+        nama_222271 = '$nama', 
+        email_222271 = '$email', 
+        username_222271 = '$username', 
+        nomorTelepon_222271 = '$nomorTelepon', 
+        foto_222271 = '$foto', 
+        role_222271 = '$role'
+        WHERE id_222271 = $id_pengguna";
+
+    // Eksekusi query
+    if (mysqli_query($db, $update_query)) {
+        echo "<script>alert('Data berhasil diperbarui!'); window.location.href='dataUser2.php';</script>";
+    } else {
+        echo "<script>alert('Gagal memperbarui data: " . mysqli_error($db) . "');</script>";
+    }
+}
+
+// Mengambil data pengguna untuk ditampilkan di form
+$rows = mysqli_query($db, "SELECT * FROM pengguna_222271");
+
+// Menghitung total pengguna
+$totalPenghuniQuery = mysqli_query($db, "SELECT COUNT(*) AS total FROM pengguna_222271");
+$totalPenghuni = mysqli_fetch_assoc($totalPenghuniQuery)['total'] ?? 0;
 ?>
-
-
 
 
 <!DOCTYPE html>
@@ -47,6 +89,31 @@ $totalPenghuni = $totalPenghuniQuery[0]['total'] ?? 0; // Default ke 0 jika tida
     <!-- Custom Stylesheet -->
     <link href="main/css/style.css" rel="stylesheet" />
 </head>
+<style>
+    .table-responsive {
+        max-height: 500px;
+        overflow-y: auto;
+    }
+
+    .table th,
+    .table td {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    @media (max-width: 768px) {
+        .table-responsive {
+            max-height: none;
+        }
+
+        .table th,
+        .table td {
+            font-size: 12px;
+            padding: 8px;
+        }
+    }
+</style>
 
 <body>
     <!--*******************
@@ -352,7 +419,7 @@ $totalPenghuni = $totalPenghuniQuery[0]['total'] ?? 0; // Default ke 0 jika tida
                         </a>
                     </li>
                     <li>
-                        <a href="dataAdmin.php">
+                        <a href="dataAdmin2.php">
                             <i class="fa fa-user-circle menu-icon"></i><span class="nav-text">Data Admin Kost</span>
                         </a>
                     </li>
@@ -373,7 +440,7 @@ $totalPenghuni = $totalPenghuniQuery[0]['total'] ?? 0; // Default ke 0 jika tida
                     </li>
 
                     <li>
-                        <a href="index.php">
+                        <a href="./logout.html">
                             <i class="fa fa-sign-out menu-icon"></i><span class="nav-text">Keluar</span>
                         </a>
                     </li>
@@ -454,45 +521,62 @@ $totalPenghuni = $totalPenghuniQuery[0]['total'] ?? 0; // Default ke 0 jika tida
                         <div class="card shadow-sm">
                             <div class="card-body">
                                 <div class="active-member">
-                                    <!-- Judul -->
-                                    <h4 class="card-title text-left mb-4">
-                                        Semua Pengguna yang Telah Bergabung dan Aktif di Sistem
-                                    </h4>
-                                    <div class="table-responsive">
-                                        <div class="table-responsive">
-                                            <table class="table table-striped table-bordered table-hover">
-                                                <thead class="thead-dark">
-                                                    <tr class="text-center">
-                                                        <th>No</th>
-                                                        <th>Profil</th>
-                                                        <th>Nama</th>
-                                                        <th>Email</th>
-                                                        <th>No HP</th>
-                                                        <th>Role</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <?php $no = 1;
-                                                    foreach ($rows as $row): ?>
-                                                        <tr>
-                                                            <td class="text-center"><?php echo $no++; ?></td>
-                                                            <td class="text-center">
-                                                                <img
-                                                                    src="<?php echo htmlspecialchars($row['foto']); ?>"
-                                                                    alt="Foto Profil"
-                                                                    class="img-fluid rounded-circle"
-                                                                    style="width: 50px; height: 50px; object-fit: cover;">
-                                                            </td>
-                                                            <td><?php echo htmlspecialchars($row['nama']); ?></td>
-                                                            <td><?php echo htmlspecialchars($row['email']); ?></td>
-                                                            <td><?php echo htmlspecialchars($row['telepon']); ?></td>
-                                                            <td class="text-center"><?php echo htmlspecialchars($row['role']); ?></td>
-                                                        </tr>
-                                                    <?php endforeach; ?>
-                                                </tbody>
-                                            </table>
-                                        </div>
+                                    <div class="details">
+                                        <div class="recentOrders">
+                                            <div class="cardHeader">
+                                                <h2>Edit Kamar Kos</h2>
+                                            </div>
 
+                                            <!-- Formulir Edit -->
+                                            <!-- Formulir Edit -->
+                                            <form action="" method="POST" enctype="multipart/form-data">
+                                                <!-- Nama -->
+                                                <div class="form-group mb-3">
+                                                    <label for="nama_222271">Nama</label>
+                                                    <input type="text" name="nama_222271" id="nama_222271" class="form-control" value="<?= htmlspecialchars($data['nama_222271']); ?>" required>
+                                                </div>
+
+                                                <!-- Email -->
+                                                <div class="form-group mb-3">
+                                                    <label for="email_222271">Email</label>
+                                                    <input type="email" name="email_222271" id="email_222271" class="form-control" value="<?= htmlspecialchars($data['email_222271']); ?>" required>
+                                                </div>
+
+                                                <!-- Username -->
+                                                <div class="form-group mb-3">
+                                                    <label for="username_222271">Username</label>
+                                                    <input type="text" name="username_222271" id="username_222271" class="form-control" value="<?= htmlspecialchars($data['username_222271']); ?>" required>
+                                                </div>
+
+                                                <!-- Nomor Telepon -->
+                                                <div class="form-group mb-3">
+                                                    <label for="nomorTelepon_222271">Nomor Telepon</label>
+                                                    <input type="text" name="nomorTelepon_222271" id="nomorTelepon_222271" class="form-control" value="<?= htmlspecialchars($data['nomorTelepon_222271']); ?>" required>
+                                                </div>
+
+                                                <!-- Role -->
+                                                <div class="form-group mb-3">
+                                                    <label for="role_222271">Role</label>
+                                                    <select name="role_222271" id="role_222271" class="form-control" required>
+                                                        <option value="user" <?= $data['role_222271'] === 'user' ? 'selected' : ''; ?>>User</option>
+                                                        <option value="admin" <?= $data['role_222271'] === 'admin' ? 'selected' : ''; ?>>Admin</option>
+                                                    </select>
+                                                </div>
+
+                                                <!-- Foto -->
+                                                <div class="form-group mb-3">
+                                                    <label for="foto_222271">Foto</label>
+                                                    <input type="file" name="foto_222271" id="foto_222271" class="form-control" accept="image/*">
+                                                    <p>Foto saat ini: <img src="<?= htmlspecialchars($data['foto_222271']); ?>" alt="Foto" width="100"></p>
+                                                </div>
+
+                                                <!-- Tombol Submit -->
+                                                <button type="submit" class="btn btn-primary" name="update">Update</button>
+
+                                                <!-- Tombol Kembali -->
+                                                <button type="button" class="btn btn-dark" onclick="window.location.href='dataUser2.php'">Kembali</button>
+                                            </form>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -502,35 +586,50 @@ $totalPenghuni = $totalPenghuniQuery[0]['total'] ?? 0; // Default ke 0 jika tida
 
 
 
+                <!-- Tambahkan Script jQuery -->
+                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                <script>
+                    $(document).ready(function() {
+                        // Memuat data tabel pertama kali
+                        loadData();
 
-                <!-- #/ container -->
-            </div>
+                        // Fungsi untuk memuat data tabel melalui AJAX
+                        function loadData() {
+                            $.ajax({
+                                url: 'ambil_data.php', // File PHP untuk mengambil data
+                                type: 'GET',
+                                success: function(response) {
+                                    $('#tabelData').html(response);
+                                }
+                            });
+                        }
+                    });
+                </script>
+                <script src="main/js/common.min.js"></script>
+                <script src="main/js/custom.min.js"></script>
+                <script src="main/js/settings.js"></script>
+                <script src="main/js/gleek.js"></script>
+                <script src="main/js/styleSwitcher.js"></script>
 
-            <script src="main/js/common.min.js"></script>
-            <script src="main/js/custom.min.js"></script>
-            <script src="main/js/settings.js"></script>
-            <script src="main/js/gleek.js"></script>
-            <script src="main/js/styleSwitcher.js"></script>
+                <!-- Chartjs -->
+                <script src="main/js/Chart.bundle.min.js"></script>
+                <!-- Circle progress -->
+                <script src="main/js/circle-progress.min.js"></script>
+                <!-- Datamap -->
+                <script src="main/js/index.js"></script>
+                <script src="main/js/topojson.min.js"></script>
+                <script src="main/js/datamaps.world.min.js"></script>
+                <!-- Morrisjs -->
+                <script src="main/js/raphael.min.js"></script>
+                <script src="main/js/morris.min.js"></script>
+                <!-- Pignose Calender -->
+                <script src="main/js/moment.min.js"></script>
+                <script src="main/js/pignose.calendar.min.js"></script>
+                <!-- ChartistJS -->
+                <script src="main/js/chartist.min.js"></script>
+                <script src="main/js/chartist-plugin-tooltip.min.js"></script>
 
-            <!-- Chartjs -->
-            <script src="main/js/Chart.bundle.min.js"></script>
-            <!-- Circle progress -->
-            <script src="main/js/circle-progress.min.js"></script>
-            <!-- Datamap -->
-            <script src="main/js/index.js"></script>
-            <script src="main/js/topojson.min.js"></script>
-            <script src="main/js/datamaps.world.min.js"></script>
-            <!-- Morrisjs -->
-            <script src="main/js/raphael.min.js"></script>
-            <script src="main/js/morris.min.js"></script>
-            <!-- Pignose Calender -->
-            <script src="main/js/moment.min.js"></script>
-            <script src="main/js/pignose.calendar.min.js"></script>
-            <!-- ChartistJS -->
-            <script src="main/js/chartist.min.js"></script>
-            <script src="main/js/chartist-plugin-tooltip.min.js"></script>
-
-            <script src="main/js/dashboard-1.js"></script>
+                <script src="main/js/dashboard-1.js"></script>
 </body>
 
 </html>

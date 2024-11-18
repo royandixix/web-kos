@@ -23,7 +23,7 @@
                     <a class="nav-link" href="kontak.php"><i class="fa-solid fa-phone"></i>&nbsp;Kontak</a>
                 </li> -->
                 <li class="nav-item">
-                    <a class="nav-link" href="dhasboard.php"><i class="fas fa-tachometer-alt"></i>&nbsp;Dashboard</a>
+                    <a class="nav-link" href="dhasboard2.php"><i class="fas fa-tachometer-alt"></i>&nbsp;Dashboard</a>
                 </li>
 
                 <!-- Profil dan Logout -->
