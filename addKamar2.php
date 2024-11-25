@@ -330,6 +330,7 @@ $totalPenghuni = mysqli_fetch_assoc($totalPenghuniQuery)['total'] ?? 0;
                                                     <span class="notification-text">One hour ago</span>
                                                 </div>
                                             </a>
+
                                         </li>
                                         <li>
                                             <a href="javascript:void()">
@@ -428,10 +429,11 @@ $totalPenghuni = mysqli_fetch_assoc($totalPenghuniQuery)['total'] ?? 0;
                         </a>
                     </li>
                     <li>
-                        <a href="./pesan.html">
-                            <i class="fa fa-envelope menu-icon"></i><span class="nav-text">Pesan</span>
+                        <a href="detailpenyewaan.php">
+                            <i class="fa fa-envelope menu-icon"></i><span class="nav-text">Data Penyewaan</span>
                         </a>
                     </li>
+
                     <li>
                         <a href="addTransaksi2.php">
                             <i class="fa fa-credit-card menu-icon"></i><span class="nav-text">Transaksi Pembayaran</span>
@@ -545,7 +547,7 @@ $totalPenghuni = mysqli_fetch_assoc($totalPenghuniQuery)['total'] ?? 0;
                                                     <input type="number" name="harga_222271" id="harga_222271" class="form-control" placeholder="Contoh: 1.000.000" required>
                                                 </div>
 
-                                              
+
 
                                                 <!-- Deskripsi Kamar -->
                                                 <div class="form-group mb-3">

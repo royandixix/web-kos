@@ -39,6 +39,20 @@
         </div>
     </div>
 </nav>
+<p class="name index">
+
+<a href="">
+    <b>
+        <span>
+            cli_get_process_title
+            <p class="tex text-decoration-line-through"></p>
+        </span>
+    </b>
+</a>
+</p>
+
+
+<script src="" ></script>
 
 <!-- SweetAlert2 CDN -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

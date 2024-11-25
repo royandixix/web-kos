@@ -24,9 +24,11 @@ $totalPenghuniQuery = query("SELECT COUNT(*) AS total FROM pengguna_222271");
 $totalPenghuni = isset($totalPenghuniQuery[0]['total']) ? $totalPenghuniQuery[0]['total'] : 0;
 
 // Mengambil data transaksi dengan join untuk mengambil nama penghuni langsung
-$rowsTransaksi = query("SELECT t.*, p.nama_222271 
-                        FROM transaksi_222271 t 
-                        JOIN penyewaan_kos_222271 p ON t.penghuni_id_222271 = p.id_222271");
+$rowsTransaksi = query("
+    SELECT t.*, p.nama_222271, p.harga_222271
+    FROM transaksi_222271 t
+    JOIN penyewaan_kos_222271 p ON t.penghuni_id_222271 = p.id_222271
+");
 
 // Mengambil total transaksi
 $totalTransaksiQuery = query("SELECT COUNT(*) AS total FROM transaksi_222271");
@@ -75,6 +77,11 @@ if (isset($_POST['login'])) {
     <link rel="stylesheet" href="main/css/chartist.min.css" />
     <link rel="stylesheet" href="css/chartist-plugin-tooltip.css" />
     <!-- Custom Stylesheet -->
+
+    <head>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    </head>
+
     <link href="main/css/style.css" rel="stylesheet" />
 </head>
 
@@ -387,10 +394,11 @@ if (isset($_POST['login'])) {
                         </a>
                     </li>
                     <li>
-                        <a href="./pesan.html">
-                            <i class="fa fa-envelope menu-icon"></i><span class="nav-text">Pesan</span>
+                        <a href="detailpenyewaan.php">
+                            <i class="fa fa-envelope menu-icon"></i><span class="nav-text">Data Penyewaan</span>
                         </a>
                     </li>
+
                     <li>
                         <a href="addTransaksi2.php">
                             <i class="fa fa-credit-card menu-icon"></i><span class="nav-text">Transaksi Pembayaran</span>
@@ -492,42 +500,34 @@ if (isset($_POST['login'])) {
                                     <!-- Tabel -->
                                     <div class="table-responsive">
                                         <table class="table table-striped table-bordered table-hover">
-                                            <thead>
-                                                <tr>
+                                            <thead class="thead-dark">
+                                                <tr class="text-center">
                                                     <th>No</th>
-                                                    <th>Nama</th>
-                                                    <th>Metode Pembayaran</th>
-                                                    <th>Harga</th>
-                                                    <th>Aksi</th>
+                                                    <th>Nama Penghuni</th>
+                                                    <th>Tanggal Transaksi</th>
+                                                    <th>Staus</th>
+                                                    <!-- <th></th> -->
+                                                    <!-- <th>Status</th> -->
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <?php
-                                                // Menampilkan data transaksi
-                                                if ($rowsTransaksi) {
-                                                    $index = 1; // Inisialisasi untuk nomor urut
-                                                    foreach ($rowsTransaksi as $row) {
-                                                ?>
-                                                        <tr>
-                                                            <td><?php echo $index++; ?></td>
-                                                            <td><?php echo htmlspecialchars($row['nama_222271']); ?></td> <!-- Nama Penghuni langsung dari hasil query -->
-                                                            <td><?php echo htmlspecialchars($row['jenis_transaksi_222271']); ?></td>
-                                                            <td><?php echo number_format($row['jumlah_222271'], 2, ',', '.'); ?></td>
-
-                                                            <td>
-                                                                <!-- Tombol untuk aksi -->
-                                                                <button class="btn btn-primary btn-sm mr-2">Edit</button>
-                                                                <button class="btn btn-danger btn-sm">Hapus</button>
-                                                            </td>
-                                                        </tr>
-                                                <?php
-                                                    }
-                                                } else {
-                                                    echo "<tr><td colspan='5' class='text-center'>Tidak ada data transaksi.</td></tr>";
-                                                }
-                                                ?>
+                                                <?php $no = 1; ?>
+                                                <?php foreach ($rowsTransaksi as $transaksi): ?>
+                                                    <tr>
+                                                        <td class="text-center"><?php echo $no++; ?></td>
+                                                        <td><?php echo htmlspecialchars($transaksi['nama_222271']); ?></td>
+                                                        <td><?php echo htmlspecialchars($transaksi['tanggal_transaksi_222271']); ?></td>
+                                                        <!-- <td><?php echo htmlspecialchars($transaksi['metode_pembayaran_222271']); ?></td> -->
+                                                        <!-- <td class="text-right"><?php echo number_format($transaksi['jumlah_222271'], 0, ',', '.'); ?></td> -->
+                                                        <td class="text-center">
+                                                            <i class="fas fa-check-circle" style="color:green;"></i>
+                                                        </td>
+                                                    </tr>
+                                                <?php endforeach; ?>
                                             </tbody>
                                         </table>
+
+
                                     </div>
                                 </div>
                             </div>

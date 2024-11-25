@@ -183,6 +183,16 @@ if (isset($_POST['login'])) {
                 </li>
 
                 <li>
+                    <a href="detailpenyewaan.php">
+                        <span class="icon">
+                            <ion-icon name="chatbubble-outline"></ion-icon>
+                        </span>
+                        <span class="title">Data Penyewaan</span>
+                    </a>
+                </li>
+
+
+                <li>
                     <a href="addTransaksi.php">
                         <span class="icon">
                             <ion-icon name="cash-outline"></ion-icon>

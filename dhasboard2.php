@@ -351,7 +351,7 @@ $totalPenghuni = $totalPenghuniQuery[0]['total'] ?? 0; // Default ke 0 jika tida
                             <i class="fa fa-users menu-icon"></i><span class="nav-text">Penghuni Kost</span>
                         </a>
                     </li>
-                    <li>
+                    <!-- <li>
                         <a href="dataAdmin.php">
                             <i class="fa fa-user-circle menu-icon"></i><span class="nav-text">Data Admin Kost</span>
                         </a>
@@ -360,7 +360,13 @@ $totalPenghuni = $totalPenghuniQuery[0]['total'] ?? 0; // Default ke 0 jika tida
                         <a href="./pesan.html">
                             <i class="fa fa-envelope menu-icon"></i><span class="nav-text">Pesan</span>
                         </a>
+                    </li> -->
+                    <li>
+                        <a href="detailpenyewaan.php">
+                            <i class="fa fa-envelope menu-icon"></i><span class="nav-text">Data Penyewaan</span>
+                        </a>
                     </li>
+
                     <li>
                         <a href="addTransaksi2.php">
                             <i class="fa fa-credit-card menu-icon"></i><span class="nav-text">Transaksi Pembayaran</span>

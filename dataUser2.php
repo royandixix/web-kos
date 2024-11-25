@@ -364,13 +364,18 @@ if (isset($_POST['login'])) {
                             <i class="fa fa-users menu-icon"></i><span class="nav-text">Penghuni Kost</span>
                         </a>
                     </li>
-                    <li>
+                    <!-- <li>
                         <a href="dataAdmin2.php">
                             <i class="fa fa-user-circle menu-icon"></i><span class="nav-text">Data Admin Kost</span>
                         </a>
                     </li>
                     <li>
                         <a href="./pesan.html">
+                            <i class="fa fa-envelope menu-icon"></i><span class="nav-text">Pesan</span>
+                        </a>
+                    </li> -->
+                    <li>
+                        <a href="detailpenyewaan.php">
                             <i class="fa fa-envelope menu-icon"></i><span class="nav-text">Pesan</span>
                         </a>
                     </li>

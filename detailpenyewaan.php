@@ -1,22 +1,29 @@
 <?php
-require 'config/fungsi.php';
+// session_start();
+require 'config/fungsi.php'; // Pastikan file ini ada dan memiliki fungsi query()
 
-// Query untuk mendapatkan data
-$query = "SELECT * FROM kamar_222271";
-$result = mysqli_query($db, $query);
+// // Cek jika pengguna sudah login
+// if (!isset($_SESSION['user'])) {
+//     header("Location: login.php"); // Redirect ke halaman login jika belum login
+//     exit;
+// }
 
-// Periksa apakah ada data
-if (!$result) {
-    die("Query error: " . mysqli_error($db));
+$sql = "SELECT * FROM penyewaan_kos_222271";
+$result = $db->query($sql);
+if ($result->num_rows > 0) {
+    // Store the result in $rows
+    $rows = $result->fetch_all(MYSQLI_ASSOC);
+} else {
+    $rows = []; // Initialize $rows as an empty array if no rows are found
 }
 
-// Simpan hasil query ke dalam array menggunakan mysqli_fetch_all
-$data_kamar = mysqli_fetch_all($result, MYSQLI_ASSOC);
-$rows = query("SELECT * FROM penyewaan_kos_222271");
-
+// Ambil total penghuni
 $totalPenghuniQuery = query("SELECT COUNT(*) AS total FROM pengguna_222271");
-$totalPenghuni = $totalPenghuniQuery[0]['total'] ?? 0; // Mengambil total atau default ke 0 jika tidak ada
+$totalPenghuni = $totalPenghuniQuery[0]['total'] ?? 0; // Default ke 0 jika tidak ada
 ?>
+
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -36,31 +43,6 @@ $totalPenghuni = $totalPenghuniQuery[0]['total'] ?? 0; // Mengambil total atau d
     <!-- Custom Stylesheet -->
     <link href="main/css/style.css" rel="stylesheet" />
 </head>
-<style>
-    .table-responsive {
-        max-height: 500px;
-        overflow-y: auto;
-    }
-
-    .table th,
-    .table td {
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    @media (max-width: 768px) {
-        .table-responsive {
-            max-height: none;
-        }
-
-        .table th,
-        .table td {
-            font-size: 12px;
-            padding: 8px;
-        }
-    }
-</style>
 
 <body>
     <!--*******************
@@ -365,8 +347,8 @@ $totalPenghuni = $totalPenghuniQuery[0]['total'] ?? 0; // Mengambil total atau d
                             <i class="fa fa-users menu-icon"></i><span class="nav-text">Penghuni Kost</span>
                         </a>
                     </li>
-                    <!-- <li>
-                        <a href="dataAdmin2.php">
+                    <li>
+                        <a href="">
                             <i class="fa fa-user-circle menu-icon"></i><span class="nav-text">Data Admin Kost</span>
                         </a>
                     </li>
@@ -374,13 +356,14 @@ $totalPenghuni = $totalPenghuniQuery[0]['total'] ?? 0; // Mengambil total atau d
                         <a href="./pesan.html">
                             <i class="fa fa-envelope menu-icon"></i><span class="nav-text">Pesan</span>
                         </a>
-                    </li> -->
+                    </li>
 
                     <li>
                         <a href="detailpenyewaan.php">
                             <i class="fa fa-envelope menu-icon"></i><span class="nav-text">Data Penyewaan</span>
                         </a>
                     </li>
+
 
                     <li>
                         <a href="addTransaksi2.php">
@@ -477,103 +460,39 @@ $totalPenghuni = $totalPenghuniQuery[0]['total'] ?? 0; // Mengambil total atau d
                                 <div class="active-member">
                                     <!-- Judul -->
                                     <h4 class="card-title text-left mb-4">
-                                        Data Kategori Kamar
+                                        Semua Pengguna yang Telah Bergabung dan Aktif di Sistem
                                     </h4>
-
-                                    <!-- Tombol Tambah Data -->
-                                    <div class="mb-3 text-right">
-                                        <a href="addKamar2.php" class="btn btn-primary">
-                                            <i class="fas fa-plus"></i> Tambah Data
-                                        </a>
-                                    </div>
-
-                                    <!-- Tabel -->
                                     <div class="table-responsive">
-                                        <table class="table table-striped table-bordered table-hover" id="tabelData">
-                                            <thead>
-                                                <tr>
+                                        <table class="table table-striped table-bordered table-hover">
+                                            <thead class="thead-dark">
+                                                <tr class="text-center">
                                                     <th>No</th>
+                                                    <th>Nama</th>
+                                                    <th>Email</th>
+                                                    <th>No HP</th>
                                                     <th>Alamat</th>
+                                                    <th>Metode Pembayaran</th>
                                                     <th>Harga</th>
-                                                    <th>Status</th>
-                                                    <th>Deskripsi</th>
-                                                    <th>Tanggal Dipaparkan</th>
-                                                    <th>Fasilitas</th>
-                                                    <th>Foto</th>
-                                                    <th>Ukuran</th>
-                                                    <th>Rating</th>
-                                                    <th>Aksi</th> <!-- Kolom Aksi -->
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <?php if (!empty($data_kamar)): ?>
-                                                    <?php foreach ($data_kamar as $index => $row): ?>
-                                                        <tr>
-                                                            <!-- Kolom Nomor -->
-                                                            <td><?php echo $index + 1; ?></td>
-
-                                                            <!-- Kolom Alamat -->
-                                                            <td><?php echo htmlspecialchars($row['alamat_222271']); ?></td>
-
-                                                            <!-- Kolom Harga -->
-                                                            <td><?php echo htmlspecialchars(number_format($row['harga_222271'], 2, ',', '.')); ?></td>
-
-                                                            <!-- Kolom Status -->
-                                                            <td><?php echo htmlspecialchars($row['status_222271']); ?></td>
-
-                                                            <!-- Kolom Deskripsi -->
-                                                            <td><?php echo htmlspecialchars($row['deskripsi_222271']); ?></td>
-
-                                                            <!-- Kolom Tanggal Tersedia -->
-                                                            <td><?php echo htmlspecialchars($row['tanggal_tersedia_222271']); ?></td>
-
-                                                            <!-- Kolom Fasilitas -->
-                                                            <td><?php echo htmlspecialchars($row['fasilitas_222271']); ?></td>
-
-                                                            <!-- Kolom Foto -->
-                                                            <td>
-                                                                <?php
-                                                                $foto_path = htmlspecialchars($row['foto_222271']);
-                                                                $upload_dir = 'uploads/';
-                                                                $full_path = $upload_dir . $foto_path;
-
-                                                                if (!empty($foto_path) && file_exists($full_path)) {
-                                                                    echo '<img src="' . $full_path . '" alt="Foto Kamar" style="width: 170px; height: auto; border: 1px solid #ddd; padding: 5px;">';
-                                                                } else {
-                                                                    echo '<img src="uploads/placeholder.jpg" alt="Foto Tidak Tersedia" style="width: 200px; height: auto;">';
-                                                                }
-                                                                ?>
-                                                            </td>
-
-                                                            <!-- Kolom Ukuran -->
-                                                            <td><?php echo htmlspecialchars($row['ukuran_222271']); ?></td>
-
-                                                            <!-- Kolom Rating -->
-                                                            <td><?php echo htmlspecialchars($row['rating_222271']); ?></td>
-
-                                                            <!-- Kolom Aksi (Edit dan Hapus) -->
-                                                            <td class="text-center">
-                                                                <!-- Tombol Edit -->
-                                                                <a href="editkamarkost2.php?id=<?php echo htmlspecialchars($row['id_222271']); ?>" class="btn btn-warning btn-sm">
-                                                                    <i class="fas fa-edit"></i> Editz
-                                                                </a>
-
-
-                                                                <!-- Tombol Hapus -->
-                                                                <a href="hapus_data.php?id=<?php echo htmlspecialchars($row['id_222271']); ?>" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?');">
-                                                                    <i class="fas fa-trash"></i> Hapus
-                                                                </a>
-                                                            </td>
-                                                        </tr>
-                                                    <?php endforeach; ?>
-                                                <?php else: ?>
+                                                <?php $no = 1;
+                                                foreach ($rows as $row): ?>
                                                     <tr>
-                                                        <td colspan="11" class="text-center">Tidak ada data kamar yang tersedia.</td>
+                                                        <td class="text-center"><?php echo $no++; ?></td>
+                                                        <td><?php echo htmlspecialchars($row['nama_222271']); ?></td>
+                                                        <td><?php echo htmlspecialchars($row['email_222271']); ?></td>
+                                                        <td><?php echo htmlspecialchars($row['telepon_222271']); ?></td>
+                                                        <td><?php echo htmlspecialchars($row['alamat_222271']); ?></td>
+                                                        <td><?php echo htmlspecialchars($row['metode_pembayaran_222271']); ?></td>
+                                                        <td class="text-right"><?php echo number_format($row['harga_222271'], 0, ',', '.'); ?></td>
                                                     </tr>
-                                                <?php endif; ?>
+                                                <?php endforeach; ?>
                                             </tbody>
                                         </table>
                                     </div>
+
+
                                 </div>
                             </div>
                         </div>
@@ -581,50 +500,37 @@ $totalPenghuni = $totalPenghuniQuery[0]['total'] ?? 0; // Mengambil total atau d
                 </div>
             </div>
 
-            <!-- Tambahkan Script jQuery -->
-            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-            <script>
-                $(document).ready(function() {
-                    // Memuat data tabel pertama kali
-                    loadData();
 
-                    // Fungsi untuk memuat data tabel melalui AJAX
-                    function loadData() {
-                        $.ajax({
-                            url: 'ambil_data.php', // File PHP untuk mengambil data
-                            type: 'GET',
-                            success: function(response) {
-                                $('#tabelData').html(response);
-                            }
-                        });
-                    }
-                });
-            </script>
-            <script src="main/js/common.min.js"></script>
-            <script src="main/js/custom.min.js"></script>
-            <script src="main/js/settings.js"></script>
-            <script src="main/js/gleek.js"></script>
-            <script src="main/js/styleSwitcher.js"></script>
 
-            <!-- Chartjs -->
-            <script src="main/js/Chart.bundle.min.js"></script>
-            <!-- Circle progress -->
-            <script src="main/js/circle-progress.min.js"></script>
-            <!-- Datamap -->
-            <script src="main/js/index.js"></script>
-            <script src="main/js/topojson.min.js"></script>
-            <script src="main/js/datamaps.world.min.js"></script>
-            <!-- Morrisjs -->
-            <script src="main/js/raphael.min.js"></script>
-            <script src="main/js/morris.min.js"></script>
-            <!-- Pignose Calender -->
-            <script src="main/js/moment.min.js"></script>
-            <script src="main/js/pignose.calendar.min.js"></script>
-            <!-- ChartistJS -->
-            <script src="main/js/chartist.min.js"></script>
-            <script src="main/js/chartist-plugin-tooltip.min.js"></script>
 
-            <script src="main/js/dashboard-1.js"></script>
+            <!-- #/ container -->
+        </div>
+
+        <script src="main/js/common.min.js"></script>
+        <script src="main/js/custom.min.js"></script>
+        <script src="main/js/settings.js"></script>
+        <script src="main/js/gleek.js"></script>
+        <script src="main/js/styleSwitcher.js"></script>
+
+        <!-- Chartjs -->
+        <script src="main/js/Chart.bundle.min.js"></script>
+        <!-- Circle progress -->
+        <script src="main/js/circle-progress.min.js"></script>
+        <!-- Datamap -->
+        <script src="main/js/index.js"></script>
+        <script src="main/js/topojson.min.js"></script>
+        <script src="main/js/datamaps.world.min.js"></script>
+        <!-- Morrisjs -->
+        <script src="main/js/raphael.min.js"></script>
+        <script src="main/js/morris.min.js"></script>
+        <!-- Pignose Calender -->
+        <script src="main/js/moment.min.js"></script>
+        <script src="main/js/pignose.calendar.min.js"></script>
+        <!-- ChartistJS -->
+        <script src="main/js/chartist.min.js"></script>
+        <script src="main/js/chartist-plugin-tooltip.min.js"></script>
+
+        <script src="main/js/dashboard-1.js"></script>
 </body>
 
 </html>

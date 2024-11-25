@@ -1,4 +1,4 @@
-<?php
+n<?php
 session_start(); // Pastikan ini di awal file
 
 require 'config/fungsi.php'; // Pindahkan ini setelah session_start()
