@@ -2,6 +2,8 @@
 require 'templates/header.php';
 require 'templates/navbar.php';
 ?>
+
+
 <div class="container my-5">
   <h3 class="text-3xl font-semibold zoom-text">
     Platform Komunikasi Penghuni Kos<br />

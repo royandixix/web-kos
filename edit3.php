@@ -438,10 +438,9 @@ $totalPenghuni = mysqli_fetch_assoc($totalPenghuniQuery)['total'] ?? 0;
                             <i class="fa fa-bed menu-icon"></i><span class="nav-text">Kategori Kamar</span>
                         </a>
                     </li>
-
                     <li>
-                        <a href="./logout.html">
-                            <i class="fa fa-sign-out menu-icon"></i><span class="nav-text">Keluar</span>
+                        <a href="logout.php">
+                            <i class="fa fa-sign-out menu-icon"></i><span class="nav-text">Logout</span>
                         </a>
                     </li>
                 </ul>

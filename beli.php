@@ -1,6 +1,7 @@
 <?php
 require 'templates/header.php';
 require 'templates/navbar.php';
+require 'templates/footer.php';
 require 'config/fungsi.php';
 
 // Check if the form is submitted via POST method
@@ -15,6 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $id_kamar_222271 = isset($_POST['id_kamar_222271']) && !empty($_POST['id_kamar_222271'])
         ? mysqli_real_escape_string($db, trim($_POST['id_kamar_222271']))
         : null;
+    $duration = isset($_POST['duration']) ? (int)$_POST['duration'] : 1; // Durasi dalam bulan
 
     // Validate payment method
     if (empty($paymentMethod)) {
@@ -40,9 +42,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit;
     }
 
+    // Calculate total price based on the duration
+    $totalPrice = $price * $duration;
+
     // Insert rental data
     $query = "INSERT INTO penyewaan_kos_222271 (nama_222271, email_222271, telepon_222271, alamat_222271, metode_pembayaran_222271, harga_222271) 
-              VALUES ('$name', '$email', '$phone', '$address', '$paymentMethod', '$price')";
+              VALUES ('$name', '$email', '$phone', '$address', '$paymentMethod', '$totalPrice')";
 
     if (mysqli_query($db, $query)) {
         $last_id = mysqli_insert_id($db);
@@ -50,7 +55,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($id_kamar_222271) {
             // Insert transaction data if room ID is available
             $transaksiQuery = "INSERT INTO transaksi_222271 (penghuni_id_222271, id_kamar_222271, tanggal_transaksi_222271, jenis_transaksi_222271, jumlah_222271, status_222271) 
-                               VALUES ('$last_id', '$id_kamar_222271', NOW(), 's', '$price', 'belum lunas')";
+                               VALUES ('$last_id', '$id_kamar_222271', NOW(), 's', '$totalPrice', 'belum lunas')";
 
             if (!mysqli_query($db, $transaksiQuery)) {
                 echo "<p style='color:orange;'>Data penyewaan berhasil disimpan, tetapi data transaksi gagal disimpan: " . mysqli_error($db) . "</p>";
@@ -81,7 +86,6 @@ function format_harga($harga)
     }
 }
 ?>
-
 <div class="container mt-5">
     <?php
     // Fetch rooms from the database
@@ -92,24 +96,18 @@ function format_harga($harga)
     if ($result && mysqli_num_rows($result) > 0) {
         foreach ($result as $row) {
     ?>
-            <div class="card d-flex flex-row mb-3" style="width: 100%;">
-                <img src="uploads/<?php echo htmlspecialchars($row['foto_222271']); ?>" alt="Gambar Kamar Kos" style="width: 50%; object-fit: cover;">
+            <div class="card shadow flex-row mb-3" style="width: 100%;">
+                <img src="uploads/<?php echo htmlspecialchars($row['foto_222271']); ?>" alt="Gambar Kamar Kos" class="card-img-left" style="width: 50%; object-fit: cover;">
                 <div class="card-body d-flex flex-column justify-content-center" style="width: 50%;">
                     <h5 class="card-title"><?php echo htmlspecialchars($row['alamat_222271']); ?></h5>
                     <p class="card-text"><?php echo htmlspecialchars($row['deskripsi_222271']); ?></p>
-                    <p class="card-text"><strong>Harga:</strong> Rp <?php echo number_format((int)$row['harga_222271'], 0, ',', '.'); ?> / bulan</p>
-
+                    <p class="card-text">
+                        <strong>Harga:</strong> Rp <?php echo format_harga((int)$row['harga_222271']); ?> / bulan
+                    </p>
                     <!-- Modal button for renting -->
-                    <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#buyKosModal" 
+                    <button type="button" class="btn btn-primary mt-3" data-bs-toggle="modal" data-bs-target="#buyKosModal"
                         data-price="<?php echo (int)$row['harga_222271']; ?>" data-id="<?php echo (int)$row['id_222271']; ?>">
                         <i class="fa-solid fa-cart-shopping"></i>&nbsp;Sewa Kamar
-                    </button>
-
-                    <!-- Modal button for room facilities -->
-                    <button type="button" class="btn btn-dark mt-2" data-bs-toggle="modal" data-bs-target="#fasilitasKosModal"
-                        data-fasilitas="<?php echo htmlspecialchars($row['fasilitas_222271']); ?>"
-                        data-kos-image="<?php echo htmlspecialchars($row['foto_222271']); ?>">
-                        <i class="fa-solid fa-info-circle"></i>&nbsp;Lihat Fasilitas
                     </button>
                 </div>
             </div>
@@ -119,27 +117,49 @@ function format_harga($harga)
         echo "<p>Tidak ada data kamar tersedia.</p>";
     }
     ?>
+
 </div>
 
-
-<!-- Modal Fasilitas -->
+<!-- Modal -->
 <div class="modal fade" id="fasilitasKosModal" tabindex="-1" aria-labelledby="fasilitasKosModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="fasilitasKosModalLabel">Fasilitas Kos</h5>
+                <h5 class="modal-title" id="fasilitasKosModalLabel">Detail Fasilitas</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                <ul id="fasilitasList"></ul>
-                <img id="fasilitasImage" src="" class="card-img-left" alt="Gambar Fasilitas Kos" style="width: 50%; object-fit: cover;">
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+            <div class="modal-body text-center">
+                <!-- Gambar fasilitas akan dimuat di sini -->
+                <img id="kosImage" src="" alt="Foto Fasilitas" class="img-fluid rounded mb-3" style="max-height: 400px;">
+                <!-- Informasi fasilitas -->
+                <p id="fasilitasText"></p>
             </div>
         </div>
     </div>
 </div>
+
+<!-- JavaScript untuk mengisi data ke dalam modal -->
+<script>
+    const fasilitasKosModal = document.getElementById('fasilitasKosModal');
+
+    fasilitasKosModal.addEventListener('show.bs.modal', function(event) {
+        // Tombol yang memicu modal
+        const button = event.relatedTarget;
+
+        // Ambil data dari tombol
+        const fasilitas = button.getAttribute('data-fasilitas');
+        const kosImage = button.getAttribute('data-kos-image');
+
+
+        // Update konten modal
+        const modalImage = fasilitasKosModal.querySelector('#kosImage');
+        const modalFasilitas = fasilitasKosModal.querySelector('#fasilitasText');
+
+        // Isi konten
+        modalImage.src = kosImage;
+        modalFasilitas.textContent = fasilitas;
+    });
+</script>
 
 <!-- Modal Formulir Penyewaan Kos -->
 <div class="modal fade" id="buyKosModal" tabindex="-1" aria-labelledby="buyKosModalLabel" aria-hidden="true">
@@ -165,19 +185,32 @@ function format_harga($harga)
                     </div>
                     <div class="mb-3">
                         <label for="address" class="form-label">Alamat Tinggal</label>
-                        <textarea class="form-control" id="address" name="address" rows="3" required></textarea>
+                        <textarea class="form-control" id="address" name="address" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="duration" class="form-label">Durasi Sewa (bulan)</label>
+                        <select class="form-select" id="duration" name="duration" required>
+                            <option value="1">1 bulan</option>
+                            <option value="2">2 bulan</option>
+                            <option value="3">3 bulan</option>
+                            <option value="6">6 bulan</option>
+                            <option value="12">12 bulan</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="price" class="form-label">Harga Total</label>
+                        <input type="text" class="form-control" id="price" name="price" readonly>
                     </div>
                     <div class="mb-3">
                         <label for="paymentMethod" class="form-label">Metode Pembayaran</label>
-                        <select class="form-control" id="paymentMethod" name="paymentMethod" required>
+                        <select class="form-select" id="paymentMethod" name="paymentMethod" required>
                             <option value="">Pilih Metode Pembayaran</option>
-                            <option value="Bank Transfer">Bank Transfer</option>
+                            <option value="Transfer Bank">Transfer Bank</option>
                             <option value="Cash">Cash</option>
                         </select>
                     </div>
-                    <input type="hidden" id="id_kamar_222271" name="id_kamar_222271">
-                    <input type="hidden" id="price" name="price">
-                    <button type="submit" class="btn btn-primary">Sewa Kamar</button>
+                    <input type="hidden" name="id_kamar_222271" id="roomId">
+                    <button type="submit" class="btn btn-success">Sewa Sekarang</button>
                 </form>
             </div>
         </div>
@@ -185,33 +218,41 @@ function format_harga($harga)
 </div>
 
 <script>
-    // Show the room price and ID in the modal
-    var buyKosModal = document.getElementById('buyKosModal');
-    buyKosModal.addEventListener('show.bs.modal', function (event) {
-        var button = event.relatedTarget;
-        var price = button.getAttribute('data-price');
-        var idKamar = button.getAttribute('data-id');
-        
-        var modalPrice = buyKosModal.querySelector('#price');
-        var modalIdKamar = buyKosModal.querySelector('#id_kamar_222271');
-        
-        modalPrice.value = price;
-        modalIdKamar.value = idKamar;
-    });
 
-    // Show the facilities in the modal
-    var fasilitasKosModal = document.getElementById('fasilitasKosModal');
-    fasilitasKosModal.addEventListener('show.bs.modal', function (event) {
-        var button = event.relatedTarget;
-        var fasilitas = button.getAttribute('data-fasilitas');
-        var imageSrc = button.getAttribute('data-kos-image');
-        
-        var fasilitasList = fasilitasKosModal.querySelector('#fasilitasList');
-        var fasilitasImage = fasilitasKosModal.querySelector('#fasilitasImage');
-        
-        fasilitasList.innerHTML = '<li>' + fasilitas + '</li>';
-        fasilitasImage.src = 'uploads/' + imageSrc;
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        // Modal for Room Selection
+        const buyKosModal = new bootstrap.Modal(document.getElementById('buyKosModal'));
+        const fasilitasKosModal = new bootstrap.Modal(document.getElementById('fasilitasKosModal'));
+
+        // Handle Room Selection Button Click
+        const buyKosBtns = document.querySelectorAll('[data-bs-target="#buyKosModal"]');
+        buyKosBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const price = parseInt(btn.getAttribute('data-price')); // Get the room price
+                const roomId = btn.getAttribute('data-id'); // Get the room ID
+                document.getElementById('price').value = price; // Set initial price in modal
+                document.getElementById('roomId').value = roomId; // Set room ID in modal
+
+                // Recalculate price when duration is changed
+                const durationSelect = document.getElementById('duration');
+                durationSelect.addEventListener('change', function() {
+                    const duration = parseInt(durationSelect.value);
+                    const totalPrice = price * duration; // Total price calculation
+                    document.getElementById('price').value = totalPrice; // Update price in modal
+                });
+            });
+        });
+
+        // Handle Room Facilities Button Click
+        const fasilitasKosBtns = document.querySelectorAll('[data-bs-target="#fasilitasKosModal"]');
+        fasilitasKosBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const fasilitas = btn.getAttribute('data-fasilitas'); // Get room facilities
+                const image = btn.getAttribute('data-kos-image'); // Get room image
+                document.getElementById('fasilitasDetail').innerText = fasilitas; // Display facilities
+                document.getElementById('kosImage').src = 'uploads/' + image; // Set image source
+            });
+        });
     });
 </script>
-
-<?php require 'templates/footer.php'; ?>

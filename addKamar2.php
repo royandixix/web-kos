@@ -444,10 +444,14 @@ $totalPenghuni = mysqli_fetch_assoc($totalPenghuniQuery)['total'] ?? 0;
                             <i class="fa fa-bed menu-icon"></i><span class="nav-text">Kategori Kamar</span>
                         </a>
                     </li>
-
                     <li>
                         <a href="index.php">
-                            <i class="fa fa-sign-out menu-icon"></i><span class="nav-text">Keluar</span>
+                            <i class="fa fa-bed menu-icon"></i><span class="nav-text">Kembali</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="logout.php">
+                            <i class="fa fa-sign-out menu-icon"></i><span class="nav-text">Logout</span>
                         </a>
                     </li>
                 </ul>
@@ -530,7 +534,7 @@ $totalPenghuni = mysqli_fetch_assoc($totalPenghuniQuery)['total'] ?? 0;
                                     <div class="details">
                                         <div class="recentOrders">
                                             <div class="cardHeader">
-                                                <h2>Tambah Kamar Kos</h2>
+                                                <h2>Tambah Kos</h2>
                                             </div>
 
                                             <!-- Formulir -->

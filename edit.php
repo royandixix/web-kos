@@ -2,8 +2,6 @@
 
 require 'config/fungsi.php';
 
-// Koneksi ke database
-$db = mysqli_connect("localhost", "root", "", "222271_royandi");
 
 // Cek koneksi
 if (!$db) {
